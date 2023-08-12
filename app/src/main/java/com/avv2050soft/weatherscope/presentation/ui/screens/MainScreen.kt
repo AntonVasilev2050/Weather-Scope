@@ -28,6 +28,7 @@ import com.avv2050soft.weatherscope.presentation.bottom_navigation.NavGraph
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun MainScreen(
+    weatherViewModel: WeatherViewModel
 //    topBanners: List<TopBanner>,
 //    categories: List<Category>,
 //    meals: List<Meal>,
@@ -40,7 +41,7 @@ fun MainScreen(
         },
         bottomBar = { BottomNavigation(navController = navController) }
     ) {
-        NavGraph(navHostController = navController)
+        NavGraph(navHostController = navController, weatherViewModel)
     }
 }
 
@@ -56,7 +57,7 @@ fun FindLocationRow() {
     ) {
         Row(
             verticalAlignment = Alignment.Top,
-            modifier = Modifier.padding(all = 16.dp)
+            modifier = Modifier.padding(all = 8.dp)
         ) {
             Icon(
                 modifier = Modifier.wrapContentHeight(),
