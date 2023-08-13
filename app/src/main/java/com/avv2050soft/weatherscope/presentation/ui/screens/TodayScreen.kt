@@ -1,18 +1,24 @@
 package com.avv2050soft.weatherscope.presentation.ui.screens
 
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredSize
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.Surface
@@ -24,15 +30,22 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.avv2050soft.weatherscope.R
 import com.avv2050soft.weatherscope.domain.models.forecast.Hour
+import com.avv2050soft.weatherscope.domain.models.forecast.Weather
+import com.avv2050soft.weatherscope.presentation.utils.CoilImage
+import kotlin.math.roundToInt
 
 @Composable
 fun TodayScreen(
@@ -41,7 +54,7 @@ fun TodayScreen(
     location: String
 ) {
     weatherViewModel.loadWeather(location)
-    val weather by remember{weatherViewModel.weatherStateFlow}.collectAsState()
+    val weather by remember { weatherViewModel.weatherStateFlow }.collectAsState()
 //    val weather = weatherViewModel.weatherStateFlow.collectAsState().value
     val hourlyForecast = weather?.forecast?.forecastday?.get(0)?.hour
     Surface(
@@ -52,101 +65,126 @@ fun TodayScreen(
                 .padding(start = 16.dp, end = 16.dp, top = 60.dp, bottom = 90.dp)
                 .fillMaxSize(),
         ) {
-            WeatherDateTime()
+            weather?.let { WeatherDateTime(it) }
             Spacer(modifier = Modifier.height(16.dp))
-            TemperatureDayNight()
-            TemperatureAndIcon()
-            WeatherConditions()
+            weather?.let { TemperatureDayNight(it) }
+            weather?.let { TemperatureAndIcon(it) }
+            weather?.let { WeatherConditions(it) }
             Spacer(modifier = Modifier.height(16.dp))
-            if (hourlyForecast != null) {
-                WeatherHourly(hourlyForecast)
-            }
+            hourlyForecast?.let { WeatherHourly(it) }
         }
     }
 }
 
 @Composable
-private fun WeatherDateTime() {
+private fun WeatherDateTime(weather: Weather) {
     Text(
-        text = "11 августа, 06:57",
+        text = weather.current.lastUpdated,
         color = Color.Black
     )
 }
 
 @Composable
-private fun TemperatureDayNight() {
+private fun TemperatureDayNight(weather: Weather) {
     Row {
         Icon(
             painter = painterResource(id = R.drawable.baseline_light_mode_24),
             contentDescription = null
         )
         Text(modifier = Modifier.padding(end = 4.dp), text = "Day:")
-        Text(text = "27")
+        Text(text = weather.forecast.forecastday[0].day.maxtempC.roundToInt().toString())
         Text(modifier = Modifier.padding(end = 8.dp), text = "°")
         Icon(
             painter = painterResource(id = R.drawable.baseline_mode_night_24),
             contentDescription = null
         )
         Text(modifier = Modifier.padding(end = 4.dp), text = "Night:")
-        Text(text = "18")
+        Text(text = weather.forecast.forecastday[0].day.mintempC.roundToInt().toString())
         Text(modifier = Modifier.padding(end = 8.dp), text = "°")
     }
 }
 
 @Composable
-private fun TemperatureAndIcon() {
+private fun TemperatureAndIcon(weather: Weather) {
     Row {
         Text(
-            "27",
+            text = weather.current.tempC.roundToInt().toString(),
             fontSize = 96.sp,
-            fontFamily = FontFamily.Monospace,
+            fontWeight = FontWeight.Light
         )
         Text(
             "°C",
             modifier = Modifier.padding(top = 20.dp),
-            fontSize = 48.sp
+            fontSize = 48.sp,
+            fontWeight = FontWeight.Light
         )
         Spacer(modifier = Modifier.width(24.dp))
-        Image(
-            painter = painterResource(id = R.drawable.havy_rain_thunder),
-            contentDescription = null,
-            alignment = Alignment.CenterEnd,
-            modifier = Modifier
-                .requiredSize(100.dp, 130.dp)
-                .padding(top = 20.dp),
-            contentScale = ContentScale.FillBounds
+        CoilImage(
+            data = "https:${weather.current.condition.icon}",
+            Modifier.size(130.dp),
+            contentDescription = "Picture of the weather conditions",
+            alignment = Alignment.Center
         )
     }
 }
 
 @Composable
-fun WeatherConditions() {
+fun WeatherConditions(weather: Weather) {
     Row {
         Text(text = "Ощущается как", modifier = Modifier.padding(end = 4.dp))
-        Text(text = "29")
+        Text(text = weather.current.feelslikeC.roundToInt().toString())
         Text(text = "°")
         Row(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(start = 36.dp),
             horizontalArrangement = Arrangement.End
         ) {
-            Text(text = "Дождь с грозой")
+            Text(
+                text = weather.current.condition.text,
+                lineHeight = 16.sp
+            )
         }
     }
 }
 
 @Composable
-fun WeatherHourly(hourlyList: List<Hour>) {
-    LazyRow{
-        items(items = hourlyList){
+fun WeatherHourly(hourlyForecast: List<Hour>) {
+    val tempFontSize = 16.sp
+    LazyRow {
+        items(items = hourlyForecast) {
             Column(
-                modifier = Modifier
-                    .padding(start = 4.dp)
-                    .fillMaxWidth(),
-                verticalArrangement = Arrangement.Center
+                modifier = Modifier.padding(top = 16.dp, end = 12.dp, bottom = 16.dp),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
-               Text(it.tempC.toString())
+                Row {
+                    Text(it.tempC.roundToInt().toString(), fontSize = tempFontSize)
+                    Text(text = "°", fontSize = tempFontSize)
+                }
+                Spacer(modifier = Modifier.height(8.dp))
+                CoilImage(
+                    data = "https:${it.condition.icon}",
+                    Modifier.size(50.dp),
+                    contentDescription = "Picture of the weather conditions",
+                    alignment = Alignment.Center
+                )
+                Divider(color = Color.LightGray, thickness = 1.dp)
+                Text(text = it.time.takeLast(5), color = Color.Black, fontSize = 14.sp)
             }
         }
+    }
+}
+
+@Composable
+fun HorizontalLine() {
+    Canvas(modifier = Modifier.fillMaxSize()) {
+        drawLine(
+            color = Color.Black,
+            start = Offset(0f, size.height / 2),
+            end = Offset(size.width, size.height / 2),
+            strokeWidth = 2.dp.toPx()
+        )
     }
 }
 
