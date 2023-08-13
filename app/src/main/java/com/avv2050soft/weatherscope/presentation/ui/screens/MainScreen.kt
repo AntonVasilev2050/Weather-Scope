@@ -6,9 +6,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.LocationOn
@@ -23,21 +21,23 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.navigation.compose.rememberNavController
+import androidx.navigation.NavHostController
+import com.avv2050soft.weatherscope.presentation.Locations
 import com.avv2050soft.weatherscope.presentation.bottom_navigation.BottomNavigation
 import com.avv2050soft.weatherscope.presentation.bottom_navigation.NavGraph
+import com.avv2050soft.weatherscope.presentation.utils.navigateSingleTopTo
 
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun MainScreen(
-    weatherViewModel: WeatherViewModel
+    weatherViewModel: WeatherViewModel,
+    navController: NavHostController
 ) {
-    val navController = rememberNavController()
+//    val navController = rememberNavController()
     Scaffold(
-        topBar = { FindLocationRow() },
+        topBar = { FindLocationRow(navController = navController) },
         bottomBar = { BottomNavigation(navController = navController) }
     ) {
         NavGraph(navHostController = navController, weatherViewModel)
@@ -45,7 +45,9 @@ fun MainScreen(
 }
 
 @Composable
-fun FindLocationRow() {
+fun FindLocationRow(
+    navController: NavHostController,
+) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -58,7 +60,7 @@ fun FindLocationRow() {
             shadowElevation = 8.dp,
             color = MaterialTheme.colorScheme.surface,
             modifier = Modifier
-                .clickable { }
+                .clickable { navController.navigateSingleTopTo(Locations.route) }
                 .padding(4.dp)
                 .weight(1f)
         ) {
@@ -81,9 +83,12 @@ fun FindLocationRow() {
             }
         }
         Icon(
-            modifier = Modifier,
+            modifier = Modifier
+                .padding(start = 8.dp)
+                .clickable {  },
             imageVector = Icons.Filled.LocationOn,
             contentDescription = "Consider my location button"
         )
     }
 }
+

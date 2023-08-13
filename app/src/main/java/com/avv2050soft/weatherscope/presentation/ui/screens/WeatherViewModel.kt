@@ -32,7 +32,7 @@ class WeatherViewModel @Inject constructor(
                     days = 3,
                     aqi = "yes",
                     alerts = "yes",
-                    lang = "ru"
+                    lang = "en"
                 )
             }
                 .onSuccess { _weatherStateFlow.value = weather }

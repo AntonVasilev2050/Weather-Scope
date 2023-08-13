@@ -37,6 +37,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -45,6 +46,7 @@ import com.avv2050soft.weatherscope.R
 import com.avv2050soft.weatherscope.domain.models.forecast.Hour
 import com.avv2050soft.weatherscope.domain.models.forecast.Weather
 import com.avv2050soft.weatherscope.presentation.utils.CoilImage
+import org.intellij.lang.annotations.JdkConstants.HorizontalAlignment
 import kotlin.math.roundToInt
 
 @Composable
@@ -68,8 +70,15 @@ fun TodayScreen(
             weather?.let { WeatherDateTime(it) }
             Spacer(modifier = Modifier.height(16.dp))
             weather?.let { TemperatureDayNight(it) }
-            weather?.let { TemperatureAndIcon(it) }
-            weather?.let { WeatherConditions(it) }
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 8.dp, end = 8.dp),
+            ) {
+                weather?.let { Temperature(weather = it) }
+                Spacer(modifier = Modifier.width(32.dp))
+                weather?.let { WeatherConditions(weather = it) }
+            }
             Spacer(modifier = Modifier.height(16.dp))
             hourlyForecast?.let { WeatherHourly(it) }
         }
@@ -105,72 +114,77 @@ private fun TemperatureDayNight(weather: Weather) {
 }
 
 @Composable
-private fun TemperatureAndIcon(weather: Weather) {
-    Row {
-        Text(
-            text = weather.current.tempC.roundToInt().toString(),
-            fontSize = 96.sp,
-            fontWeight = FontWeight.Light
-        )
-        Text(
-            "°C",
-            modifier = Modifier.padding(top = 20.dp),
-            fontSize = 48.sp,
-            fontWeight = FontWeight.Light
-        )
-        Spacer(modifier = Modifier.width(24.dp))
-        CoilImage(
-            data = "https:${weather.current.condition.icon}",
-            Modifier.size(130.dp),
-            contentDescription = "Picture of the weather conditions",
-            alignment = Alignment.Center
-        )
+private fun Temperature(weather: Weather) {
+    Column(
+        horizontalAlignment = Alignment.Start
+    ) {
+        Row {
+            Text(
+                text = weather.current.tempC.roundToInt().toString(),
+                fontSize = 96.sp,
+                fontWeight = FontWeight.Light
+            )
+            Text(
+                "°C",
+                modifier = Modifier.padding(top = 20.dp),
+                fontSize = 48.sp,
+                fontWeight = FontWeight.Light
+            )
+        }
+        Row {
+            Text(text = "Fills like ", modifier = Modifier.padding(end = 4.dp))
+            Text(text = weather.current.feelslikeC.roundToInt().toString())
+            Text(text = "°")
+        }
     }
 }
 
 @Composable
 fun WeatherConditions(weather: Weather) {
-    Row {
-        Text(text = "Ощущается как", modifier = Modifier.padding(end = 4.dp))
-        Text(text = weather.current.feelslikeC.roundToInt().toString())
-        Text(text = "°")
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(start = 36.dp),
-            horizontalArrangement = Arrangement.End
-        ) {
-            Text(
-                text = weather.current.condition.text,
-                lineHeight = 16.sp
-            )
-        }
+    Column(
+        horizontalAlignment = Alignment.Start
+    ) {
+        CoilImage(
+            data = "https:${weather.current.condition.icon}",
+            Modifier.size(120.dp),
+            contentDescription = "Picture of the weather conditions",
+            alignment = Alignment.BottomEnd
+        )
+        Text(
+            text = weather.current.condition.text,
+            lineHeight = 16.sp,
+            textAlign = TextAlign.Center
+        )
     }
+
 }
 
 @Composable
 fun WeatherHourly(hourlyForecast: List<Hour>) {
     val tempFontSize = 16.sp
     LazyRow {
-        items(items = hourlyForecast) {
+        items(items = hourlyForecast) {hourForecast ->
             Column(
-                modifier = Modifier.padding(top = 16.dp, end = 12.dp, bottom = 16.dp),
+                modifier = Modifier.padding(top = 32.dp,  bottom = 16.dp),
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Row {
-                    Text(it.tempC.roundToInt().toString(), fontSize = tempFontSize)
+                Row (
+
+                ){
+                    Text(hourForecast.tempC.roundToInt().toString(), fontSize = tempFontSize)
                     Text(text = "°", fontSize = tempFontSize)
                 }
-                Spacer(modifier = Modifier.height(8.dp))
+                Spacer(modifier = Modifier.height(16.dp))
                 CoilImage(
-                    data = "https:${it.condition.icon}",
+                    data = "https:${hourForecast.condition.icon}",
                     Modifier.size(50.dp),
                     contentDescription = "Picture of the weather conditions",
-                    alignment = Alignment.Center
+                    alignment = Alignment.BottomCenter
                 )
-                Divider(color = Color.LightGray, thickness = 1.dp)
-                Text(text = it.time.takeLast(5), color = Color.Black, fontSize = 14.sp)
+                Divider(modifier = Modifier.width(70.dp), color = Color.LightGray, thickness = 1.dp)
+                Spacer(modifier = Modifier.height(8.dp))
+                Text(text = hourForecast.time.takeLast(5), color = Color.Black, fontSize = 14.sp)
             }
         }
     }
