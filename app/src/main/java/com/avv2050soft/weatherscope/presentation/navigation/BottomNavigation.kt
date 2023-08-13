@@ -1,4 +1,4 @@
-package com.avv2050soft.weatherscope.presentation.bottom_navigation
+package com.avv2050soft.weatherscope.presentation.navigation
 
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon

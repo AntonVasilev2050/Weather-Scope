@@ -23,9 +23,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import com.avv2050soft.weatherscope.presentation.Locations
-import com.avv2050soft.weatherscope.presentation.bottom_navigation.BottomNavigation
-import com.avv2050soft.weatherscope.presentation.bottom_navigation.NavGraph
+import com.avv2050soft.weatherscope.presentation.navigation.Locations
+import com.avv2050soft.weatherscope.presentation.navigation.BottomNavigation
+import com.avv2050soft.weatherscope.presentation.navigation.WeatherScopeNavHost
 import com.avv2050soft.weatherscope.presentation.utils.navigateSingleTopTo
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -40,7 +40,7 @@ fun MainScreen(
         topBar = { FindLocationRow(navController = navController) },
         bottomBar = { BottomNavigation(navController = navController) }
     ) {
-        NavGraph(navHostController = navController, weatherViewModel)
+        WeatherScopeNavHost(navHostController = navController, weatherViewModel)
     }
 }
 

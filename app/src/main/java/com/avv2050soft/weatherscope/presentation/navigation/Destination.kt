@@ -1,4 +1,4 @@
-package com.avv2050soft.weatherscope.presentation
+package com.avv2050soft.weatherscope.presentation.navigation
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.twotone.LocationOn
@@ -9,10 +9,9 @@ interface Destination {
     val route: String
 }
 
-object Locations: Destination{
+object Locations: Destination {
     override val icon: ImageVector
         get() = Icons.TwoTone.LocationOn
     override val route: String
         get() = "locations_screen"
-
 }

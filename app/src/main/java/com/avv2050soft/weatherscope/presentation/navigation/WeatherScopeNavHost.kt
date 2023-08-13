@@ -1,4 +1,4 @@
-package com.avv2050soft.weatherscope.presentation.bottom_navigation
+package com.avv2050soft.weatherscope.presentation.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -12,7 +12,7 @@ import com.avv2050soft.weatherscope.presentation.ui.screens.TomorrowScreen
 import com.avv2050soft.weatherscope.presentation.ui.screens.WeatherViewModel
 
 @Composable
-fun NavGraph(
+fun WeatherScopeNavHost(
     navHostController: NavHostController,
     weatherViewModel: WeatherViewModel
 ) {
