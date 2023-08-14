@@ -1,9 +1,16 @@
 package com.avv2050soft.weatherscope.presentation.ui.screens
 
 import android.util.Log
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.avv2050soft.weatherscope.data.repository.LocationNameKey
+import com.avv2050soft.weatherscope.domain.models.autocomplete.Autocomplete
+import com.avv2050soft.weatherscope.domain.models.autocomplete.AutocompleteItem
 import com.avv2050soft.weatherscope.domain.models.forecast.Weather
+import com.avv2050soft.weatherscope.domain.repository.SharedPreferencesRepository
 import com.avv2050soft.weatherscope.domain.repository.WeatherRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
@@ -15,7 +22,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class WeatherViewModel @Inject constructor(
-    private val repository: WeatherRepository
+    private val weatherRepository: WeatherRepository,
+    private val sharedPreferencesRepository: SharedPreferencesRepository
 ) : ViewModel() {
     private var weather: Weather? = null
     private val _weatherStateFlow = MutableStateFlow(weather)
@@ -24,10 +32,39 @@ class WeatherViewModel @Inject constructor(
     private val _message = Channel<String>()
     val message = _message.receiveAsFlow()
 
-    fun loadWeather(location: String) {
+    private var location: String = ""
+    private val _locationStateFlow = MutableStateFlow(location)
+    val locationStateFlow = _locationStateFlow.asStateFlow()
+
+    private var autocomplete = emptyList<AutocompleteItem>()
+    private val _autocompleteStateFlow = MutableStateFlow(autocomplete)
+    val autocompleteStateFlow = _autocompleteStateFlow.asStateFlow()
+
+    var editTextValue by mutableStateOf("")
+        private set
+
+    fun updateEditTextValue(input: String){
+        editTextValue = input
+    }
+
+    fun loadAutocomplete(location: String){
         viewModelScope.launch {
             kotlin.runCatching {
-                weather = repository.getWeather(
+                autocomplete = weatherRepository.search(location)
+            }
+                .onSuccess { _autocompleteStateFlow.value = autocomplete}
+                .onFailure {
+                    _message.send("An error occurred when getting autocomplete")
+                    Log.d("data_test", it.message.toString())
+                }
+        }
+    }
+
+
+    fun loadWeather(location: String) {
+        viewModelScope.launch {
+            runCatching {
+                weather = weatherRepository.getWeather(
                     location = location,
                     days = 3,
                     aqi = "yes",
@@ -38,6 +75,32 @@ class WeatherViewModel @Inject constructor(
                 .onSuccess { _weatherStateFlow.value = weather }
                 .onFailure {
                     _message.send("An error occurred when getting weather")
+                    Log.d("data_test", it.message.toString())
+                }
+        }
+    }
+
+    fun getLocationFromPreferences() {
+        viewModelScope.launch {
+            runCatching {
+                location = sharedPreferencesRepository.getString(LocationNameKey, "Krasnodar") ?: ""
+            }
+                .onSuccess { _locationStateFlow.value = location }
+                .onFailure {
+                    _message.send("An error occurred when getting location from preferences")
+                    Log.d("data_test", it.message.toString())
+                }
+        }
+    }
+
+    fun saveLocationToPreferences(location: String) {
+        viewModelScope.launch {
+            runCatching {
+                sharedPreferencesRepository.saveString(LocationNameKey, location)
+            }
+                .onSuccess { _message.send("Success when saving location to the preferences") }
+                .onFailure {
+                    _message.send("An error occurred when saving location to the preferences")
                     Log.d("data_test", it.message.toString())
                 }
         }

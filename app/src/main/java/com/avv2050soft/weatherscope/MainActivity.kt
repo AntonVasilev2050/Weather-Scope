@@ -11,17 +11,20 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.avv2050soft.weatherscope.domain.repository.SharedPreferencesRepository
 import com.avv2050soft.weatherscope.presentation.ui.screens.MainScreen
 import com.avv2050soft.weatherscope.presentation.ui.screens.WeatherViewModel
 import com.avv2050soft.weatherscope.presentation.ui.theme.WeatherScopeTheme
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
-class MainActivity : ComponentActivity() {
+class MainActivity  : ComponentActivity() {
     private val weatherViewModel by viewModels<WeatherViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setContent {
             WeatherScopeTheme {
                 val navController = rememberNavController()
@@ -31,8 +34,8 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     MainScreen(
-                        weatherViewModel,
-                        navController
+                        navController = navController,
+                        weatherViewModel = weatherViewModel,
                     )
                 }
             }

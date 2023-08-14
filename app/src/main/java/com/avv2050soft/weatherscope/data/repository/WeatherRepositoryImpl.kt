@@ -27,3 +27,5 @@ class WeatherRepositoryImpl @Inject constructor() : WeatherRepository {
         return WeatherApi.create().search(location = location)
     }
 }
+
+const val LocationNameKey = "location name key"

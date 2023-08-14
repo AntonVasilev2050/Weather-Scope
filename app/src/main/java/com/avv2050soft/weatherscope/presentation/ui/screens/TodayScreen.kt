@@ -1,19 +1,14 @@
 package com.avv2050soft.weatherscope.presentation.ui.screens
 
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.requiredSize
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
@@ -27,32 +22,27 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavHostController
 import com.avv2050soft.weatherscope.R
 import com.avv2050soft.weatherscope.domain.models.forecast.Hour
 import com.avv2050soft.weatherscope.domain.models.forecast.Weather
 import com.avv2050soft.weatherscope.presentation.utils.CoilImage
-import org.intellij.lang.annotations.JdkConstants.HorizontalAlignment
 import kotlin.math.roundToInt
 
 @Composable
 fun TodayScreen(
     modifier: Modifier = Modifier,
     weatherViewModel: WeatherViewModel,
+    navHostController: NavHostController,
     location: String
 ) {
     weatherViewModel.loadWeather(location)
@@ -64,22 +54,30 @@ fun TodayScreen(
     ) {
         Column(
             modifier = Modifier
-                .padding(start = 16.dp, end = 16.dp, top = 60.dp, bottom = 90.dp)
+                .padding(start = 16.dp, end = 16.dp, top = 4.dp, bottom = 90.dp)
                 .fillMaxSize(),
         ) {
-            weather?.let { WeatherDateTime(it) }
-            Spacer(modifier = Modifier.height(16.dp))
-            weather?.let { TemperatureDayNight(it) }
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(start = 8.dp, end = 8.dp),
-            ) {
-                weather?.let { Temperature(weather = it) }
-                Spacer(modifier = Modifier.width(32.dp))
-                weather?.let { WeatherConditions(weather = it) }
+            weather?.let {
+                FindLocationRow(
+                    weather = it,
+                    navHostController = navHostController,
+                    weatherViewModel = weatherViewModel
+                )
+                Spacer(modifier = Modifier.height(16.dp))
+                WeatherDateTime(it)
+                Spacer(modifier = Modifier.height(16.dp))
+                TemperatureDayNight(it)
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 8.dp, end = 8.dp),
+                ) {
+                    Temperature(weather = it)
+                    Spacer(modifier = Modifier.width(32.dp))
+                    WeatherConditions(weather = it)
+                }
             }
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(32.dp))
             hourlyForecast?.let { WeatherHourly(it) }
         }
     }
@@ -100,16 +98,16 @@ private fun TemperatureDayNight(weather: Weather) {
             painter = painterResource(id = R.drawable.baseline_light_mode_24),
             contentDescription = null
         )
-        Text(modifier = Modifier.padding(end = 4.dp), text = "Day:")
+        Text(text = "Day:", modifier = Modifier.padding(end = 4.dp), )
         Text(text = weather.forecast.forecastday[0].day.maxtempC.roundToInt().toString())
-        Text(modifier = Modifier.padding(end = 8.dp), text = "°")
+        Text( text = "°", modifier = Modifier.padding(end = 24.dp),)
         Icon(
             painter = painterResource(id = R.drawable.baseline_mode_night_24),
             contentDescription = null
         )
-        Text(modifier = Modifier.padding(end = 4.dp), text = "Night:")
+        Text( text = "Night:", modifier = Modifier.padding(end = 4.dp),)
         Text(text = weather.forecast.forecastday[0].day.mintempC.roundToInt().toString())
-        Text(modifier = Modifier.padding(end = 8.dp), text = "°")
+        Text( text = "°", modifier = Modifier.padding(end = 8.dp),)
     }
 }
 
@@ -163,15 +161,15 @@ fun WeatherConditions(weather: Weather) {
 fun WeatherHourly(hourlyForecast: List<Hour>) {
     val tempFontSize = 16.sp
     LazyRow {
-        items(items = hourlyForecast) {hourForecast ->
+        items(items = hourlyForecast) { hourForecast ->
             Column(
-                modifier = Modifier.padding(top = 32.dp,  bottom = 16.dp),
+                modifier = Modifier.padding(top = 32.dp, bottom = 16.dp),
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Row (
+                Row(
 
-                ){
+                ) {
                     Text(hourForecast.tempC.roundToInt().toString(), fontSize = tempFontSize)
                     Text(text = "°", fontSize = tempFontSize)
                 }

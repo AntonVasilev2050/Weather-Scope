@@ -39,6 +39,7 @@ fun BottomNavigation(
             NavigationBarItem(
                 selected = currentRoute == item.route,
                 onClick = {
+                    navController.popBackStack()
                     navController.navigateSingleTopTo(item.route)
                 },
                 icon = {
