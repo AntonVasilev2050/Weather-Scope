@@ -1,5 +1,6 @@
 package com.avv2050soft.weatherscope.presentation.navigation
 
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -28,6 +29,7 @@ fun BottomNavigation(
         BottomItem.Forecast,
     )
     NavigationBar(
+        modifier = Modifier.height(BottomNavigationHeight),
         containerColor = Color.White,
         contentColor = Color.LightGray
     ) {
@@ -63,3 +65,5 @@ fun BottomNavigation(
         }
     }
 }
+
+private val BottomNavigationHeight = 80.dp
