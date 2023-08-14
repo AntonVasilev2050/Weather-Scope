@@ -44,7 +44,7 @@ fun AutocompleteLocationScreen(
                         .height(56.dp)
                         .fillMaxWidth()
                         .clickable {
-                            weatherViewModel.saveLocationToPreferences("${it.lat},${it.lon}")
+                            weatherViewModel.saveLocationToPreferences("${it.lat},${it.lon},${it.name},${it.country}")
                             weatherViewModel.getLocationFromPreferences()
                             navHostController.navigateUp()
                         },

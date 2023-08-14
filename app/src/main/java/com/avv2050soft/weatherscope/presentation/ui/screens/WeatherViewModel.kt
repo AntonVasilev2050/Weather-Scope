@@ -7,7 +7,6 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.avv2050soft.weatherscope.data.repository.LocationNameKey
-import com.avv2050soft.weatherscope.domain.models.autocomplete.Autocomplete
 import com.avv2050soft.weatherscope.domain.models.autocomplete.AutocompleteItem
 import com.avv2050soft.weatherscope.domain.models.forecast.Weather
 import com.avv2050soft.weatherscope.domain.repository.SharedPreferencesRepository
