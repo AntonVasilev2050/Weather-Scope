@@ -5,6 +5,7 @@ plugins {
     id("org.jetbrains.kotlin.android")
     kotlin("kapt")
     id("com.google.dagger.hilt.android")
+    id("com.google.devtools.ksp")
 }
 
 android {
@@ -71,7 +72,7 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
 
-    implementation ("androidx.navigation:navigation-compose:2.7.0-rc01")
+    implementation ("androidx.navigation:navigation-compose:2.7.0")
     implementation ("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.1")
 
     //retrofit
@@ -89,8 +90,13 @@ dependencies {
     implementation ("com.github.skydoves:landscapist-glide:2.1.7")
     implementation ("io.coil-kt:coil-compose:2.3.0")
 
+    val room_version = "2.5.2"
+    implementation ("androidx.room:room-runtime:$room_version")
+    implementation ("androidx.room:room-ktx:$room_version")
+    ksp ("androidx.room:room-compiler:$room_version")
+
     implementation("com.google.dagger:hilt-android:2.46")
-    kapt("com.google.dagger:hilt-android-compiler:2.46")
+    kapt ("com.google.dagger:hilt-android-compiler:2.46")
 }
 
 // Allow references to generated code

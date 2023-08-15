@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -15,6 +16,7 @@ import com.avv2050soft.weatherscope.presentation.ui.screens.TodayScreen
 import com.avv2050soft.weatherscope.presentation.ui.screens.TomorrowScreen
 import com.avv2050soft.weatherscope.presentation.ui.screens.WeatherViewModel
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun WeatherScopeNavHost(
     navHostController: NavHostController,

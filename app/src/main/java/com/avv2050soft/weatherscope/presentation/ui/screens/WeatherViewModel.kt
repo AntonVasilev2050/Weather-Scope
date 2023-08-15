@@ -48,7 +48,7 @@ class WeatherViewModel @Inject constructor(
 
     fun loadAutocomplete(location: String){
         viewModelScope.launch {
-            kotlin.runCatching {
+            runCatching {
                 autocomplete = weatherRepository.search(location)
             }
                 .onSuccess { _autocompleteStateFlow.value = autocomplete}
