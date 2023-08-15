@@ -77,7 +77,7 @@ fun TodayScreen(
                     WeatherConditions(weather = it)
                 }
             }
-            Spacer(modifier = Modifier.height(32.dp))
+            Spacer(modifier = Modifier.height(48.dp))
             hourlyForecast?.let { WeatherHourly(it) }
         }
     }
