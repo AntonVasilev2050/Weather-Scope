@@ -44,6 +44,8 @@ import androidx.navigation.NavHostController
 import com.avv2050soft.weatherscope.domain.models.autocomplete.AutocompleteItem
 import com.avv2050soft.weatherscope.presentation.navigation.SavedLocations
 import com.avv2050soft.weatherscope.presentation.utils.navigateSingleTopTo
+import kotlinx.coroutines.flow.last
+import kotlinx.coroutines.flow.singleOrNull
 
 @ExperimentalComposeUiApi
 @Composable
@@ -53,7 +55,6 @@ fun AutocompleteLocationScreen(
     navHostController: NavHostController,
 ) {
     val autocomplete by remember { weatherViewModel.autocompleteStateFlow }.collectAsState()
-//    val autocomplete by remember { mutableStateOf(emptyList<AutocompleteItem>())  }
 
     Column(
         modifier = Modifier
