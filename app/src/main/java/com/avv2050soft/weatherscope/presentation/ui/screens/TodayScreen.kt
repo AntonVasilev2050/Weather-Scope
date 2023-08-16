@@ -1,6 +1,5 @@
 package com.avv2050soft.weatherscope.presentation.ui.screens
 
-import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -24,7 +23,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -99,16 +97,16 @@ private fun TemperatureDayNight(weather: Weather) {
             painter = painterResource(id = R.drawable.baseline_light_mode_24),
             contentDescription = null
         )
-        Text(text = "Day:", modifier = Modifier.padding(end = 4.dp), )
+        Text(text = "Day:", modifier = Modifier.padding(end = 4.dp))
         Text(text = weather.forecast.forecastday[0].day.maxtempC.roundToInt().toString())
-        Text( text = "°", modifier = Modifier.padding(end = 24.dp),)
+        Text(text = "°", modifier = Modifier.padding(end = 24.dp))
         Icon(
             painter = painterResource(id = R.drawable.baseline_mode_night_24),
             contentDescription = null
         )
-        Text( text = "Night:", modifier = Modifier.padding(end = 4.dp),)
+        Text(text = "Night:", modifier = Modifier.padding(end = 4.dp))
         Text(text = weather.forecast.forecastday[0].day.mintempC.roundToInt().toString())
-        Text( text = "°", modifier = Modifier.padding(end = 8.dp),)
+        Text(text = "°", modifier = Modifier.padding(end = 8.dp))
     }
 }
 
@@ -167,13 +165,10 @@ fun WeatherHourly(hourlyForecast: List<Hour>) {
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Row(
-
-                ) {
+                Row {
                     Text(hourForecast.tempC.roundToInt().toString(), fontSize = tempFontSize)
                     Text(text = "°", fontSize = tempFontSize)
                 }
-//                Spacer(modifier = Modifier.height(16.dp))
                 CoilImage(
                     data = "https:${hourForecast.condition.icon}",
                     Modifier.size(50.dp),
@@ -188,16 +183,5 @@ fun WeatherHourly(hourlyForecast: List<Hour>) {
     }
 }
 
-@Composable
-fun HorizontalLine() {
-    Canvas(modifier = Modifier.fillMaxSize()) {
-        drawLine(
-            color = Color.Black,
-            start = Offset(0f, size.height / 2),
-            end = Offset(size.width, size.height / 2),
-            strokeWidth = 2.dp.toPx()
-        )
-    }
-}
 
 

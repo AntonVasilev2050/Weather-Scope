@@ -10,8 +10,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Text
@@ -25,8 +27,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.avv2050soft.weatherscope.domain.models.forecast.Forecastday
+import com.avv2050soft.weatherscope.domain.models.forecast.Hour
 import com.avv2050soft.weatherscope.presentation.navigation.SavedLocations
 import com.avv2050soft.weatherscope.presentation.utils.CoilImage
 import com.avv2050soft.weatherscope.presentation.utils.navigateSingleTopTo
@@ -41,7 +45,6 @@ fun ForecastScreen(
 ) {
     weatherViewModel.loadWeather(location)
     val weather by remember { weatherViewModel.weatherStateFlow }.collectAsState()
-    val hourlyForecast = weather?.forecast?.forecastday?.get(0)?.hour
     val forecastDay: List<Forecastday> = weather?.forecast?.forecastday ?: emptyList()
     Column {
         Text(
@@ -70,7 +73,7 @@ fun ForecastScreen(
 //                    Spacer(modifier = Modifier.height(48.dp))
                     Text(text = "Weather hourly:", color = Color.Gray)
                     Spacer(modifier = Modifier.height(4.dp))
-                    hourlyForecast?.let { WeatherHourly(it) }
+                    WeatherDayHourly(forecastDayHour = forecastDay.hour )
                     Spacer(modifier = Height)
                     Divider(
                         modifier = Modifier.fillMaxWidth(),
@@ -152,6 +155,33 @@ fun DetailsForecast(forecastDay: Forecastday) {
         ) {
             Text(text = "Sunrise/Sunset", modifier = Modifier.fillMaxWidth(Fraction04), color = Color.Gray)
             Text(text = "${forecastDay.astro.sunrise} / ${forecastDay.astro.sunset}")
+        }
+    }
+}
+
+@Composable
+fun WeatherDayHourly(forecastDayHour: List<Hour>) {
+    val tempFontSize = 16.sp
+    LazyRow {
+        items(items = forecastDayHour) {
+            Column(
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Row {
+                    Text(it.tempC.roundToInt().toString(), fontSize = tempFontSize)
+                    Text(text = "°", fontSize = tempFontSize)
+                }
+                CoilImage(
+                    data = "https:${it.condition.icon}",
+                    Modifier.size(50.dp),
+                    contentDescription = "Picture of the weather conditions",
+                    alignment = Alignment.BottomCenter
+                )
+                Divider(modifier = Modifier.width(70.dp), color = Color.LightGray, thickness = 1.dp)
+                Spacer(modifier = Modifier.height(8.dp))
+                Text(text = it.time.takeLast(5), color = Color.Black, fontSize = 14.sp)
+            }
         }
     }
 }

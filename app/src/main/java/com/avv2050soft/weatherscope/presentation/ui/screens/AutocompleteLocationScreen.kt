@@ -1,12 +1,10 @@
 package com.avv2050soft.weatherscope.presentation.ui.screens
 
 import android.content.Context
-import android.provider.CallLog.Locations
 import android.view.ViewTreeObserver
 import android.view.inputmethod.InputMethodManager
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -47,8 +45,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import com.avv2050soft.weatherscope.data.local.entities.LocationInDbItem
-import com.avv2050soft.weatherscope.presentation.navigation.Destination
 import com.avv2050soft.weatherscope.presentation.navigation.SavedLocations
 import com.avv2050soft.weatherscope.presentation.utils.navigateSingleTopTo
 

@@ -6,7 +6,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.avv2050soft.weatherscope.data.local.entities.LocationInDbItem
 import com.avv2050soft.weatherscope.data.repository.LocationNameKey
 import com.avv2050soft.weatherscope.domain.models.autocomplete.AutocompleteItem
