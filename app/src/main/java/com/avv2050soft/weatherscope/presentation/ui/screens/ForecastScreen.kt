@@ -67,6 +67,11 @@ fun ForecastScreen(
                     modifier = Modifier
                         .padding(start = 16.dp, end = 16.dp)
                 ) {
+                    Divider(
+                        modifier = Modifier.fillMaxWidth(),
+                        color = Color.LightGray,
+                        thickness = 3.dp
+                    )
                     BasicForecast(forecastDay)
                     Spacer(modifier = Height)
                     DetailsForecast(forecastDay)
@@ -75,11 +80,7 @@ fun ForecastScreen(
                     Spacer(modifier = Modifier.height(4.dp))
                     WeatherDayHourly(forecastDayHour = forecastDay.hour )
                     Spacer(modifier = Height)
-                    Divider(
-                        modifier = Modifier.fillMaxWidth(),
-                        color = Color.LightGray,
-                        thickness = 3.dp
-                    )
+
                 }
             }
         }
@@ -107,7 +108,7 @@ fun BasicForecast(forecastDay: Forecastday) {
         ) {
             CoilImage(
                 data = "https:${forecastDay.day.condition.icon}",
-                Modifier.size(80.dp),
+                Modifier.size(50.dp),
                 contentDescription = "Picture of the weather conditions",
                 alignment = Alignment.Center
             )
