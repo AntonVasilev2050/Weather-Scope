@@ -1,6 +1,7 @@
 package com.avv2050soft.weatherscope.presentation.ui.screens
 
 import android.content.Context
+import android.provider.CallLog.Locations
 import android.view.ViewTreeObserver
 import android.view.inputmethod.InputMethodManager
 import androidx.compose.foundation.clickable
@@ -47,6 +48,7 @@ import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.avv2050soft.weatherscope.data.local.entities.LocationInDbItem
+import com.avv2050soft.weatherscope.presentation.navigation.Destination
 import com.avv2050soft.weatherscope.presentation.navigation.SavedLocations
 import com.avv2050soft.weatherscope.presentation.utils.navigateSingleTopTo
 
@@ -89,6 +91,7 @@ fun AutocompleteLocationScreen(
                                 weatherViewModel.saveLocationToPreferences(locationString)
                                 weatherViewModel.getLocationFromPreferences()
                                 weatherViewModel.updateEditTextValue("")
+                                navHostController.popBackStack()
                                 navHostController.navigateUp()
                             },
                         horizontalArrangement = Arrangement.Start

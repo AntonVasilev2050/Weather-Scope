@@ -76,7 +76,9 @@ fun TodayScreen(
                     WeatherConditions(weather = it)
                 }
             }
-            Spacer(modifier = Modifier.height(48.dp))
+            Spacer(modifier = Modifier.height(64.dp))
+            Text(text = "Weather hourly:")
+            Spacer(modifier = Modifier.height(4.dp))
             hourlyForecast?.let { WeatherHourly(it) }
         }
     }
@@ -162,7 +164,6 @@ fun WeatherHourly(hourlyForecast: List<Hour>) {
     LazyRow {
         items(items = hourlyForecast) { hourForecast ->
             Column(
-                modifier = Modifier.padding(top = 32.dp, bottom = 16.dp),
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
@@ -172,7 +173,7 @@ fun WeatherHourly(hourlyForecast: List<Hour>) {
                     Text(hourForecast.tempC.roundToInt().toString(), fontSize = tempFontSize)
                     Text(text = "°", fontSize = tempFontSize)
                 }
-                Spacer(modifier = Modifier.height(16.dp))
+//                Spacer(modifier = Modifier.height(16.dp))
                 CoilImage(
                     data = "https:${hourForecast.condition.icon}",
                     Modifier.size(50.dp),
