@@ -47,7 +47,6 @@ fun TodayScreen(
 ) {
     weatherViewModel.loadWeather(location)
     val weather by remember { weatherViewModel.weatherStateFlow }.collectAsState()
-//    val weather = weatherViewModel.weatherStateFlow.collectAsState().value
     val hourlyForecast = weather?.forecast?.forecastday?.get(0)?.hour
     Surface(
         color = colorScheme.primary

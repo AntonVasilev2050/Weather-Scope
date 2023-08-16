@@ -32,7 +32,7 @@ fun WeatherScopeNavHost(
         composable("today_screen") {
             TodayScreen(
                 modifier = Modifier,
-                weatherViewModel,
+                weatherViewModel = weatherViewModel,
                 navHostController = navHostController,
                 location = location
             )
@@ -41,7 +41,12 @@ fun WeatherScopeNavHost(
             TomorrowScreen()
         }
         composable("forecast_screen") {
-            ForecastScreen()
+            ForecastScreen(
+                modifier = Modifier,
+                weatherViewModel = weatherViewModel,
+                navHostController = navHostController,
+                location = location
+            )
         }
         composable("saved_locations_screen") {
             SavedLocationsScreen(

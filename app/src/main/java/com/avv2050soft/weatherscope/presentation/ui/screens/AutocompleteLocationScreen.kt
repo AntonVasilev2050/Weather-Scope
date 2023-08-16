@@ -5,6 +5,7 @@ import android.view.ViewTreeObserver
 import android.view.inputmethod.InputMethodManager
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -18,6 +19,7 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.twotone.ArrowBack
 import androidx.compose.material.icons.twotone.Place
 import androidx.compose.material.icons.twotone.Star
 import androidx.compose.material3.Divider
@@ -160,6 +162,14 @@ fun FindLocationEditTextAutocomplete(
                 }
             },
         label = { Text("Find location") },
+        leadingIcon = {
+            Icon(
+                modifier = Modifier
+                    .clickable { navHostController.navigateUp() },
+                imageVector = Icons.TwoTone.ArrowBack,
+                contentDescription = "Go back to SavedLocations screen"
+            )
+        },
         singleLine = true,
     )
     Spacer(modifier = Modifier.height(8.dp))

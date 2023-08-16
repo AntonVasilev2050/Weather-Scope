@@ -15,6 +15,8 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.twotone.ArrowBack
+import androidx.compose.material.icons.twotone.ArrowForward
 import androidx.compose.material.icons.twotone.Clear
 import androidx.compose.material.icons.twotone.Place
 import androidx.compose.material.icons.twotone.Star
@@ -130,12 +132,20 @@ fun FindLocationEditTextSaved(
             modifier = Modifier
                 .onFocusChanged {
                     if (it.isFocused) {
-                        navHostController.popBackStack()
+//                        navHostController.popBackStack()
                         navHostController.navigateSingleTopTo(AutocompleteLocations.route)
                     }
                 }
                 .fillMaxWidth(1f),
             label = { Text("Find location") },
+            leadingIcon = {
+                Icon(
+                    modifier = Modifier
+                        .clickable { navHostController.navigateSingleTopTo(AutocompleteLocations.route) },
+                    imageVector = Icons.TwoTone.ArrowForward,
+                    contentDescription = "Go back to SavedLocations screen"
+                )
+            },
             singleLine = true,
         )
         Spacer(modifier = Modifier.height(8.dp))
