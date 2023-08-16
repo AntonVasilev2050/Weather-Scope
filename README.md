@@ -27,5 +27,6 @@ https://drive.google.com/file/d/18AleviqKbDCd6OqQQLs3Mc2CgfXWE6QX/view?usp=shari
 6. Разбить большие Compose на более компактные.
 7. Уменьшить повторения кода.
 8. Добавить определение геопозиции.
+9. Закончить экран "Today"
 
 
