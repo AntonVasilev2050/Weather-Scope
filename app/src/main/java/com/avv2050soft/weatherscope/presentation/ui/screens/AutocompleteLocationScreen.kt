@@ -4,10 +4,12 @@ import android.content.Context
 import android.view.ViewTreeObserver
 import android.view.inputmethod.InputMethodManager
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.defaultMinSize
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -17,6 +19,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.twotone.Place
+import androidx.compose.material.icons.twotone.Star
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -41,11 +44,9 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import com.avv2050soft.weatherscope.domain.models.autocomplete.AutocompleteItem
+import com.avv2050soft.weatherscope.data.local.entities.LocationInDbItem
 import com.avv2050soft.weatherscope.presentation.navigation.SavedLocations
 import com.avv2050soft.weatherscope.presentation.utils.navigateSingleTopTo
-import kotlinx.coroutines.flow.last
-import kotlinx.coroutines.flow.singleOrNull
 
 @ExperimentalComposeUiApi
 @Composable
@@ -63,32 +64,60 @@ fun AutocompleteLocationScreen(
     ) {
         FindLocationEditTextAutocomplete(weatherViewModel, navHostController)
         Text(text = "Autocomplete")
-        LazyColumn {
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxHeight()
+                .padding(top = 8.dp, bottom = 350.dp)
+        ) {
             items(items = autocomplete) {
                 Row(
                     modifier = Modifier
+                        .padding(start = 4.dp, end = 8.dp)
                         .defaultMinSize(minHeight = 56.dp)
                         .wrapContentHeight()
-                        .fillMaxWidth()
-                        .clickable {
-                            val locationString = "${it.lat},${it.lon},${it.name},${it.country}"
-                            weatherViewModel.saveLocationToPreferences(locationString)
-                            weatherViewModel.getLocationFromPreferences()
-                            weatherViewModel.updateEditTextValue("")
-                            navHostController.navigateUp()
-                        },
-                    verticalAlignment = Alignment.CenterVertically
+                        .fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween
                 ) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth(0.9f)
+                            .clickable {
+                                val locationString = "${it.lat},${it.lon},${it.name},${it.country}"
+                                weatherViewModel.saveLocationToPreferences(locationString)
+                                weatherViewModel.getLocationFromPreferences()
+                                weatherViewModel.updateEditTextValue("")
+                                navHostController.navigateUp()
+                            },
+                        horizontalArrangement = Arrangement.Start
+                    ) {
+                        Icon(
+                            modifier = Modifier
+                                .wrapContentHeight()
+                                .size(32.dp),
+                            imageVector = Icons.TwoTone.Place,
+                            contentDescription = null,
+                        )
+                        Text(
+                            text = "${it.name}, ${it.country}",
+                            modifier = Modifier.padding(all = 8.dp)
+                        )
+                    }
                     Icon(
                         modifier = Modifier
+                            .align(Alignment.CenterVertically)
                             .wrapContentHeight()
-                            .size(40.dp),
-                        imageVector = Icons.TwoTone.Place,
-                        contentDescription = null,
-                    )
-                    Text(
-                        text = "${it.name}, ${it.country}",
-                        modifier = Modifier.padding(all = 8.dp)
+                            .size(32.dp)
+                            .clickable {
+                                weatherViewModel.insertInDatabase(it)
+                                val locationString = "${it.lat},${it.lon},${it.name},${it.country}"
+                                weatherViewModel.saveLocationToPreferences(locationString)
+                                weatherViewModel.getLocationFromPreferences()
+                                weatherViewModel.updateEditTextValue("")
+                                navHostController.navigateUp()
+                            },
+                        imageVector = Icons.TwoTone.Star,
+                        contentDescription = "Add to favorite locations"
                     )
                 }
                 Divider(
@@ -103,7 +132,10 @@ fun AutocompleteLocationScreen(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun FindLocationEditTextAutocomplete(weatherViewModel: WeatherViewModel, navHostController: NavHostController) {
+fun FindLocationEditTextAutocomplete(
+    weatherViewModel: WeatherViewModel,
+    navHostController: NavHostController
+) {
     var text by rememberSaveable { mutableStateOf(weatherViewModel.editTextValue) }
     val focusRequester = remember { FocusRequester() }
     weatherViewModel.loadAutocomplete(text)

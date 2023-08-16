@@ -8,7 +8,6 @@ import com.google.gson.annotations.SerializedName
 data class LocationInDbItem(
     @SerializedName("country")
     val country: String,
-
     @PrimaryKey
     @SerializedName("id")
     val id: Int,
