@@ -17,7 +17,7 @@ interface WeatherApi {
         // Pass US Zipcode, UK Postcode, Canada Postalcode, IP address,
         // Latitude/Longitude (decimal degree) or city name.
         @Query("q") location: String,
-        @Query("days") days: Int = 10,
+        @Query("days") days: Int = 14,
         @Query("aqi") aqi: String = "yes", //Get air quality data
         @Query("alerts") alerts: String = "yes", // Get weather alert data
         @Query("lang") language: String = "ru"
