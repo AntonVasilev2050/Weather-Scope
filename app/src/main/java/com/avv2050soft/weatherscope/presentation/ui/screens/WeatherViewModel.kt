@@ -68,7 +68,7 @@ class WeatherViewModel @Inject constructor(
             runCatching {
                 weather = weatherRepository.getWeather(
                     location = location,
-                    days = 3,
+                    days = 14,
                     aqi = "yes",
                     alerts = "yes",
                     lang = "en"
