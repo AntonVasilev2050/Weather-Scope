@@ -20,7 +20,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -46,6 +48,7 @@ fun ForecastScreen(
     weatherViewModel.loadWeather(location)
     val weather by remember { weatherViewModel.weatherStateFlow }.collectAsState()
     val forecastDay: List<Forecastday> = weather?.forecast?.forecastday ?: emptyList()
+
     Column {
         Text(
             modifier = Modifier
@@ -63,8 +66,12 @@ fun ForecastScreen(
                 .padding(top = 8.dp, bottom = 70.dp)
         ) {
             items(items = forecastDay) { forecastDay ->
+                var isExpanded by remember {
+                    mutableStateOf(false)
+                }
                 Column(
                     modifier = Modifier
+                        .clickable { isExpanded = !isExpanded }
                         .padding(start = 16.dp, end = 16.dp)
                 ) {
                     Divider(
@@ -74,13 +81,10 @@ fun ForecastScreen(
                     )
                     BasicForecast(forecastDay)
                     Spacer(modifier = Height)
-                    DetailsForecast(forecastDay)
-//                    Spacer(modifier = Modifier.height(48.dp))
-                    Text(text = "Weather hourly:", color = Color.Gray)
-                    Spacer(modifier = Modifier.height(4.dp))
-                    WeatherDayHourly(forecastDayHour = forecastDay.hour )
-                    Spacer(modifier = Height)
 
+                    DetailsForecast(forecastDay, isExpanded)
+                    WeatherDayHourly(forecastDayHour = forecastDay.hour, isExpanded)
+                    Spacer(modifier = Height)
                 }
             }
         }
@@ -96,7 +100,7 @@ fun BasicForecast(forecastDay: Forecastday) {
     ) {
         Row(
             modifier = Modifier
-                .fillMaxWidth(0.6f)
+                .fillMaxWidth(0.7f)
         ) {
             Column {
                 Text(text = forecastDay.date, fontWeight = FontWeight.ExtraBold)
@@ -121,67 +125,95 @@ fun BasicForecast(forecastDay: Forecastday) {
 }
 
 @Composable
-fun DetailsForecast(forecastDay: Forecastday) {
-    Column(
-        horizontalAlignment = Alignment.Start,
-    ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth(),
-            horizontalArrangement = Arrangement.Start
+fun DetailsForecast(forecastDay: Forecastday, isExpanded: Boolean) {
+    if (isExpanded) {
+        Column(
+            horizontalAlignment = Alignment.Start,
         ) {
-            Text(text = "Wind", modifier = Modifier.fillMaxWidth(Fraction04), color = Color.Gray)
-            Text(text = "${forecastDay.day.maxwindKph} km/hour")
-        }
-        Row(
-            modifier = Modifier
-                .fillMaxWidth(),
-            horizontalArrangement = Arrangement.Start
-        ) {
-            Text(text = "Humidity", modifier = Modifier.fillMaxWidth(Fraction04), color = Color.Gray)
-            Text(text = "${forecastDay.day.avghumidity} %")
-        }
-        Row(
-            modifier = Modifier
-                .fillMaxWidth(),
-            horizontalArrangement = Arrangement.Start
-        ) {
-            Text(text = "UV index", modifier = Modifier.fillMaxWidth(Fraction04), color = Color.Gray)
-            Text(text = "${forecastDay.day.uv}")
-        }
-        Row(
-            modifier = Modifier
-                .fillMaxWidth(),
-            horizontalArrangement = Arrangement.Start
-        ) {
-            Text(text = "Sunrise/Sunset", modifier = Modifier.fillMaxWidth(Fraction04), color = Color.Gray)
-            Text(text = "${forecastDay.astro.sunrise} / ${forecastDay.astro.sunset}")
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                horizontalArrangement = Arrangement.Start
+            ) {
+                Text(
+                    text = "Wind",
+                    modifier = Modifier.fillMaxWidth(Fraction04),
+                    color = Color.Gray
+                )
+                Text(text = "${forecastDay.day.maxwindKph} km/hour")
+            }
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                horizontalArrangement = Arrangement.Start
+            ) {
+                Text(
+                    text = "Humidity",
+                    modifier = Modifier.fillMaxWidth(Fraction04),
+                    color = Color.Gray
+                )
+                Text(text = "${forecastDay.day.avghumidity} %")
+            }
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                horizontalArrangement = Arrangement.Start
+            ) {
+                Text(
+                    text = "UV index",
+                    modifier = Modifier.fillMaxWidth(Fraction04),
+                    color = Color.Gray
+                )
+                Text(text = "${forecastDay.day.uv}")
+            }
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                horizontalArrangement = Arrangement.Start
+            ) {
+                Text(
+                    text = "Sunrise/Sunset",
+                    modifier = Modifier.fillMaxWidth(Fraction04),
+                    color = Color.Gray
+                )
+                Text(text = "${forecastDay.astro.sunrise} / ${forecastDay.astro.sunset}")
+            }
         }
     }
 }
 
 @Composable
-fun WeatherDayHourly(forecastDayHour: List<Hour>) {
+fun WeatherDayHourly(forecastDayHour: List<Hour>, isExpanded: Boolean) {
     val tempFontSize = 16.sp
-    LazyRow {
-        items(items = forecastDayHour) {
-            Column(
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Row {
-                    Text(it.tempC.roundToInt().toString(), fontSize = tempFontSize)
-                    Text(text = "°", fontSize = tempFontSize)
+    if (isExpanded) {
+        Column {
+            Text(text = "Weather hourly:", color = Color.Gray)
+            Spacer(modifier = Modifier.height(4.dp))
+            LazyRow {
+                items(items = forecastDayHour) {
+                    Column(
+                        verticalArrangement = Arrangement.Center,
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Row {
+                            Text(it.tempC.roundToInt().toString(), fontSize = tempFontSize)
+                            Text(text = "°", fontSize = tempFontSize)
+                        }
+                        CoilImage(
+                            data = "https:${it.condition.icon}",
+                            Modifier.size(50.dp),
+                            contentDescription = "Picture of the weather conditions",
+                            alignment = Alignment.BottomCenter
+                        )
+                        Divider(
+                            modifier = Modifier.width(70.dp),
+                            color = Color.LightGray,
+                            thickness = 1.dp
+                        )
+                        Spacer(modifier = Modifier.height(8.dp))
+                        Text(text = it.time.takeLast(5), color = Color.Black, fontSize = 14.sp)
+                    }
                 }
-                CoilImage(
-                    data = "https:${it.condition.icon}",
-                    Modifier.size(50.dp),
-                    contentDescription = "Picture of the weather conditions",
-                    alignment = Alignment.BottomCenter
-                )
-                Divider(modifier = Modifier.width(70.dp), color = Color.LightGray, thickness = 1.dp)
-                Spacer(modifier = Modifier.height(8.dp))
-                Text(text = it.time.takeLast(5), color = Color.Black, fontSize = 14.sp)
             }
         }
     }
