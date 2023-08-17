@@ -22,6 +22,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -66,9 +67,7 @@ fun ForecastScreen(
                 .padding(top = 8.dp, bottom = 70.dp)
         ) {
             items(items = forecastDay) { forecastDay ->
-                var isExpanded by remember {
-                    mutableStateOf(false)
-                }
+                var isExpanded by rememberSaveable { mutableStateOf(false) }
                 Column(
                     modifier = Modifier
                         .clickable { isExpanded = !isExpanded }
