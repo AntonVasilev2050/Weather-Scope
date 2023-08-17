@@ -50,30 +50,6 @@ class WeatherViewModel @Inject constructor(
         editTextValue = input
     }
 
-//    var isExpanded by mutableStateOf(false)
-//        private set
-//
-//    fun switchIsExpanded(){
-//        isExpanded = !isExpanded
-//    }
-
-    private var isExpended = false
-    private val _isExpendedStateFlow = MutableStateFlow(isExpended)
-    val isExpendedStateFlow = _isExpendedStateFlow.asStateFlow()
-
-    fun switchIsExpanded(){
-        kotlin.runCatching {
-            isExpended = !isExpended
-        }
-            .onSuccess {
-                _isExpendedStateFlow.value = isExpended
-            }
-            .onFailure {
-                Log.d("data_test", it.message.toString())
-            }
-
-    }
-
     fun loadAutocomplete(location: String) {
         viewModelScope.launch {
             runCatching {
@@ -172,4 +148,21 @@ class WeatherViewModel @Inject constructor(
         }
 
     }
+
+//    private var isExpended = false
+//    private val _isExpendedStateFlow = MutableStateFlow(isExpended)
+//    val isExpendedStateFlow = _isExpendedStateFlow.asStateFlow()
+//
+//    fun switchIsExpanded(){
+//        kotlin.runCatching {
+//            isExpended = !isExpended
+//        }
+//            .onSuccess {
+//                _isExpendedStateFlow.value = isExpended
+//            }
+//            .onFailure {
+//                Log.d("data_test", it.message.toString())
+//            }
+//
+//    }
 }

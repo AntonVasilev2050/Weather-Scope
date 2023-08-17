@@ -1,22 +1,32 @@
 Видео демонстрация:
 
-https://drive.google.com/file/d/18AleviqKbDCd6OqQQLs3Mc2CgfXWE6QX/view?usp=sharing
+https://drive.google.com/file/d/18G_ZHNQcU2WKdj-OudY1BQrgOrVRswyC/view?usp=sharing
 
 Скриншоты:
 
-![Screenshot_20230816](app/src/main/res/drawable/screenshot_20230816.png)
+![screenshot_20230817](app/src/main/res/drawable/screenshot_20230817.png)
 
 ---------------
 
-![Screenshot_20230816_1](app/src/main/res/drawable/screenshot_20230816_1.png)
+![screenshot_20230817_1](app/src/main/res/drawable/screenshot_20230817_1.png)
 
 ------------
 
-![Screenshot_20230816_2](app/src/main/res/drawable/screenshot_20230816_2.png)
+![screenshot_20230817_2](app/src/main/res/drawable/screenshot_20230817_2.png)
 
 ------------
 
-![Screenshot_20230816_3](app/src/main/res/drawable/screenshot_20230816_3.png)
+![screenshot_20230817_3](app/src/main/res/drawable/screenshot_20230817_3.png)
+
+------------
+
+![screenshot_20230817_4](app/src/main/res/drawable/screenshot_20230817_4.png)
+
+------------
+
+![screenshot_20230817_5](app/src/main/res/drawable/screenshot_20230817_5.png)
+
+-----------
 
 Что еще планирую сделать:
 1. Обновление погоды по свайпу.

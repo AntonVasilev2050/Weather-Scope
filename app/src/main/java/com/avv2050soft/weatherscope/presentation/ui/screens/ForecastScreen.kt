@@ -79,8 +79,6 @@ fun ForecastScreen(
                         thickness = 3.dp
                     )
                     BasicForecast(forecastDay)
-                    Spacer(modifier = Height)
-
                     DetailsForecast(forecastDay, isExpanded)
                     WeatherDayHourly(forecastDayHour = forecastDay.hour, isExpanded)
                     Spacer(modifier = Height)
@@ -129,6 +127,7 @@ fun DetailsForecast(forecastDay: Forecastday, isExpanded: Boolean) {
         Column(
             horizontalAlignment = Alignment.Start,
         ) {
+            Spacer(modifier = Height)
             Row(
                 modifier = Modifier
                     .fillMaxWidth(),
