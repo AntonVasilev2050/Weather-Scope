@@ -189,8 +189,8 @@ fun WeatherDayHourly(forecastDayHour: List<Hour>, isExpanded: Boolean) {
     val tempFontSize = 16.sp
     if (isExpanded) {
         Column {
+            Spacer(modifier = Modifier.height(8.dp))
             Text(text = "Weather hourly:", color = Color.Gray)
-            Spacer(modifier = Modifier.height(4.dp))
             LazyRow {
                 items(items = forecastDayHour) {
                     Column(
@@ -207,12 +207,6 @@ fun WeatherDayHourly(forecastDayHour: List<Hour>, isExpanded: Boolean) {
                             contentDescription = "Picture of the weather conditions",
                             alignment = Alignment.BottomCenter
                         )
-                        Divider(
-                            modifier = Modifier.width(50.dp),
-                            color = Color.LightGray,
-                            thickness = 1.dp
-                        )
-                        Spacer(modifier = Modifier.height(8.dp))
                         Text(text = it.time.takeLast(5), color = Color.Black, fontSize = 14.sp)
                     }
                 }
