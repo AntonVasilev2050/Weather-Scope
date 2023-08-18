@@ -103,9 +103,9 @@ fun BasicForecast(forecastDay: Forecastday) {
             Column {
                 Text(
                     text = forecastDay.dateEpoch.formattedDate("EEEE, dd MMM"),
-                    fontWeight = FontWeight.ExtraBold
+                    fontWeight = FontWeight.SemiBold
                 )
-                Text(text = forecastDay.day.condition.text, color = Color.Gray)
+                Text(text = forecastDay.day.condition.text)
             }
         }
         Row(
