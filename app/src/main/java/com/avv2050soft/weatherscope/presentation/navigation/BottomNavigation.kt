@@ -30,7 +30,7 @@ fun BottomNavigation(
     )
     NavigationBar(
         modifier = Modifier.height(BottomNavigationHeight),
-        containerColor = Color.White,
+        containerColor = colorScheme.primary,
         contentColor = Color.LightGray
     ) {
         val backStackEntry by navController.currentBackStackEntryAsState()
@@ -56,11 +56,11 @@ fun BottomNavigation(
                     )
                 },
                 colors = NavigationBarItemDefaults.colors(
-                    selectedIconColor = colorScheme.primary,
-                    selectedTextColor = colorScheme.primary,
+                    selectedIconColor = Color.White,
+                    selectedTextColor = Color.White,
                     unselectedIconColor = colorScheme.outlineVariant,
                     unselectedTextColor = colorScheme.outlineVariant,
-                    indicatorColor = Color.White
+                    indicatorColor = colorScheme.primary
                 )
             )
         }

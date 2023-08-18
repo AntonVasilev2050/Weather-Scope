@@ -13,8 +13,8 @@ class DatabaseRepositoryImpl @Inject constructor(
 
     private val db = WeatherDatabase.getInstance(context)
 
-    override suspend fun insertInDb(locationInDbItem: LocationItemDto) {
-        db.locationsDao().insert(locationInDbItem)
+    override suspend fun insertInDb(locationItemDto: LocationItemDto) {
+        db.locationsDao().insert(locationItemDto)
     }
 
     override suspend fun getAllLocationItemsFromDb(): List<AutocompleteItem> {

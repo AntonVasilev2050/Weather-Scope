@@ -12,10 +12,10 @@ import com.avv2050soft.weatherscope.domain.models.autocomplete.AutocompleteItem
 import com.avv2050soft.weatherscope.domain.models.forecast.Weather
 import com.avv2050soft.weatherscope.domain.repository.DatabaseRepository
 import com.avv2050soft.weatherscope.domain.repository.SharedPreferencesRepository
-import com.avv2050soft.weatherscope.domain.repository.WeatherRepository
 import com.avv2050soft.weatherscope.domain.usecases.GetAllLocationItemsFromDatabaseUseCase
 import com.avv2050soft.weatherscope.domain.usecases.GetWeatherUseCase
 import com.avv2050soft.weatherscope.domain.usecases.GetAutocompleteListUseCase
+import com.avv2050soft.weatherscope.domain.usecases.InsertInDatabaseUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -26,14 +26,14 @@ import javax.inject.Inject
 
 @HiltViewModel
 class WeatherViewModel @Inject constructor(
-    private val weatherRepository: WeatherRepository,
     private val sharedPreferencesRepository: SharedPreferencesRepository,
     private val databaseRepository: DatabaseRepository,
     private val getWeatherUseCase: GetWeatherUseCase,
     private val getAutocompleteListUseCase: GetAutocompleteListUseCase,
-    private val getAllLocationItemsFromDatabaseUseCase: GetAllLocationItemsFromDatabaseUseCase
+    private val getAllLocationItemsFromDatabaseUseCase: GetAllLocationItemsFromDatabaseUseCase,
+    private val insertInDatabaseUseCase: InsertInDatabaseUseCase
 
-    ) : ViewModel() {
+) : ViewModel() {
     private var weather: Weather? = null
     private val _weatherStateFlow = MutableStateFlow(weather)
     val weatherStateFlow = _weatherStateFlow.asStateFlow()
@@ -115,7 +115,7 @@ class WeatherViewModel @Inject constructor(
     }
 
     fun insertInDatabase(autocompleteItem: AutocompleteItem) {
-        val locationInDbItem = LocationItemDto(
+        val locationItemDto = LocationItemDto(
             country = autocompleteItem.country,
             id = autocompleteItem.id,
             lat = autocompleteItem.lat,
@@ -125,7 +125,7 @@ class WeatherViewModel @Inject constructor(
             url = autocompleteItem.url
         )
         viewModelScope.launch {
-            databaseRepository.insertInDb(locationInDbItem)
+            insertInDatabaseUseCase.insertInDb(locationItemDto)
         }
     }
 

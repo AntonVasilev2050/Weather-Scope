@@ -56,7 +56,7 @@ fun TodayScreen(
                 .padding(start = 16.dp, end = 16.dp, top = 4.dp, bottom = 90.dp)
                 .fillMaxSize(),
         ) {
-            if (weather != null){
+            if (weather != null) {
                 weather?.let {
                     FindLocationRow(
                         weather = it,
@@ -81,7 +81,7 @@ fun TodayScreen(
                 Text(text = "Weather hourly:")
                 Spacer(modifier = Modifier.height(4.dp))
                 hourlyForecast?.let { WeatherHourly(it) }
-            }else{
+            } else {
                 Text(
                     modifier = Modifier
                         .fillMaxSize()
@@ -98,7 +98,7 @@ fun TodayScreen(
 private fun WeatherDateTime(weather: Weather) {
     Text(
         text = weather.current.lastUpdatedEpoch.formattedDate("dd MMMM, HH:mm"),
-        color = Color.Black
+        fontWeight = FontWeight.ExtraBold
     )
 }
 
@@ -189,7 +189,11 @@ fun WeatherHourly(hourlyForecast: List<Hour>) {
                 )
                 Divider(modifier = Modifier.width(50.dp), color = Color.LightGray, thickness = 1.dp)
                 Spacer(modifier = Modifier.height(8.dp))
-                Text(text = hourForecast.time.takeLast(5), color = Color.Black, fontSize = 14.sp)
+                Text(
+                    text = hourForecast.time.takeLast(5),
+                    fontWeight = FontWeight.SemiBold,
+                    fontSize = 14.sp
+                )
             }
         }
     }
