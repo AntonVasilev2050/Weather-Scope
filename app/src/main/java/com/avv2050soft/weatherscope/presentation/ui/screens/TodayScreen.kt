@@ -34,6 +34,10 @@ import com.avv2050soft.weatherscope.R
 import com.avv2050soft.weatherscope.domain.models.forecast.Hour
 import com.avv2050soft.weatherscope.domain.models.forecast.Weather
 import com.avv2050soft.weatherscope.presentation.utils.CoilImage
+import com.avv2050soft.weatherscope.presentation.utils.formattedDate
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 import kotlin.math.roundToInt
 
 @Composable
@@ -85,7 +89,7 @@ fun TodayScreen(
 @Composable
 private fun WeatherDateTime(weather: Weather) {
     Text(
-        text = weather.current.lastUpdated,
+        text = weather.current.lastUpdatedEpoch.formattedDate("dd MMMM, HH:mm"),
         color = Color.Black
     )
 }
@@ -175,7 +179,7 @@ fun WeatherHourly(hourlyForecast: List<Hour>) {
                     contentDescription = "Picture of the weather conditions",
                     alignment = Alignment.BottomCenter
                 )
-                Divider(modifier = Modifier.width(70.dp), color = Color.LightGray, thickness = 1.dp)
+                Divider(modifier = Modifier.width(50.dp), color = Color.LightGray, thickness = 1.dp)
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(text = hourForecast.time.takeLast(5), color = Color.Black, fontSize = 14.sp)
             }

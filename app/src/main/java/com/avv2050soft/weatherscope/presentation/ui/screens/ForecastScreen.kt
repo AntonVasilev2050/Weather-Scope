@@ -36,6 +36,7 @@ import com.avv2050soft.weatherscope.domain.models.forecast.Forecastday
 import com.avv2050soft.weatherscope.domain.models.forecast.Hour
 import com.avv2050soft.weatherscope.presentation.navigation.SavedLocations
 import com.avv2050soft.weatherscope.presentation.utils.CoilImage
+import com.avv2050soft.weatherscope.presentation.utils.formattedDate
 import com.avv2050soft.weatherscope.presentation.utils.navigateSingleTopTo
 import kotlin.math.roundToInt
 
@@ -100,7 +101,10 @@ fun BasicForecast(forecastDay: Forecastday) {
                 .fillMaxWidth(0.7f)
         ) {
             Column {
-                Text(text = forecastDay.date, fontWeight = FontWeight.ExtraBold)
+                Text(
+                    text = forecastDay.dateEpoch.formattedDate("EEEE, dd MMM"),
+                    fontWeight = FontWeight.ExtraBold
+                )
                 Text(text = forecastDay.day.condition.text, color = Color.Gray)
             }
         }
@@ -204,7 +208,7 @@ fun WeatherDayHourly(forecastDayHour: List<Hour>, isExpanded: Boolean) {
                             alignment = Alignment.BottomCenter
                         )
                         Divider(
-                            modifier = Modifier.width(70.dp),
+                            modifier = Modifier.width(50.dp),
                             color = Color.LightGray,
                             thickness = 1.dp
                         )
