@@ -13,6 +13,8 @@ import com.avv2050soft.weatherscope.domain.models.forecast.Weather
 import com.avv2050soft.weatherscope.domain.repository.DatabaseRepository
 import com.avv2050soft.weatherscope.domain.repository.SharedPreferencesRepository
 import com.avv2050soft.weatherscope.domain.repository.WeatherRepository
+import com.avv2050soft.weatherscope.domain.usecases.GetWeatherUseCase
+import com.avv2050soft.weatherscope.domain.usecases.getAutocompleteListUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -25,7 +27,9 @@ import javax.inject.Inject
 class WeatherViewModel @Inject constructor(
     private val weatherRepository: WeatherRepository,
     private val sharedPreferencesRepository: SharedPreferencesRepository,
-    private val databaseRepository: DatabaseRepository
+    private val databaseRepository: DatabaseRepository,
+    private val getWeatherUseCase: GetWeatherUseCase,
+    private val getAutocompleteListUseCase: getAutocompleteListUseCase
 
 ) : ViewModel() {
     private var weather: Weather? = null
@@ -53,7 +57,7 @@ class WeatherViewModel @Inject constructor(
     fun loadAutocomplete(location: String) {
         viewModelScope.launch {
             runCatching {
-                autocomplete = weatherRepository.search(location)
+                autocomplete = getAutocompleteListUseCase.search(location)
             }
                 .onSuccess { _autocompleteStateFlow.value = autocomplete }
                 .onFailure {
@@ -66,7 +70,7 @@ class WeatherViewModel @Inject constructor(
     fun loadWeather(location: String) {
         viewModelScope.launch {
             runCatching {
-                weather = weatherRepository.getWeather(
+                weather = getWeatherUseCase.getWeather(
                     location = location,
                     days = 14,
                     aqi = "yes",
@@ -148,21 +152,4 @@ class WeatherViewModel @Inject constructor(
         }
 
     }
-
-//    private var isExpended = false
-//    private val _isExpendedStateFlow = MutableStateFlow(isExpended)
-//    val isExpendedStateFlow = _isExpendedStateFlow.asStateFlow()
-//
-//    fun switchIsExpanded(){
-//        kotlin.runCatching {
-//            isExpended = !isExpended
-//        }
-//            .onSuccess {
-//                _isExpendedStateFlow.value = isExpended
-//            }
-//            .onFailure {
-//                Log.d("data_test", it.message.toString())
-//            }
-//
-//    }
 }

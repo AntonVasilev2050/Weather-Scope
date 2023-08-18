@@ -1,6 +1,5 @@
 package com.avv2050soft.weatherscope.domain.repository
 
-import com.avv2050soft.weatherscope.domain.models.autocomplete.Autocomplete
 import com.avv2050soft.weatherscope.domain.models.autocomplete.AutocompleteItem
 import com.avv2050soft.weatherscope.domain.models.forecast.Weather
 

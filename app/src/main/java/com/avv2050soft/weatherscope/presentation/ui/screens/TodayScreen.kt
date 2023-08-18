@@ -151,7 +151,7 @@ private fun Temperature(weather: Weather) {
 @Composable
 fun WeatherConditions(weather: Weather) {
     Column(
-        horizontalAlignment = Alignment.Start
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
         CoilImage(
             data = "https:${weather.current.condition.icon}",

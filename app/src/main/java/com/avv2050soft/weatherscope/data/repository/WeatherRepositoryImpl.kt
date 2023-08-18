@@ -2,6 +2,7 @@ package com.avv2050soft.weatherscope.data.repository
 
 import com.avv2050soft.weatherscope.data.api.WeatherApi
 import com.avv2050soft.weatherscope.domain.models.autocomplete.Autocomplete
+import com.avv2050soft.weatherscope.domain.models.autocomplete.AutocompleteItem
 import com.avv2050soft.weatherscope.domain.models.forecast.Weather
 import com.avv2050soft.weatherscope.domain.repository.WeatherRepository
 import javax.inject.Inject
@@ -23,7 +24,7 @@ class WeatherRepositoryImpl @Inject constructor() : WeatherRepository {
         )
     }
 
-    override suspend fun search(location: String): Autocomplete {
+    override suspend fun search(location: String): List<AutocompleteItem> {
         return WeatherApi.create().search(location = location)
     }
 }
