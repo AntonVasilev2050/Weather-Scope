@@ -3,6 +3,7 @@ package com.avv2050soft.weatherscope.data.repository
 import android.content.Context
 import com.avv2050soft.weatherscope.data.local.db.WeatherDatabase
 import com.avv2050soft.weatherscope.data.local.dto.LocationItemDto
+import com.avv2050soft.weatherscope.domain.models.autocomplete.AutocompleteItem
 import com.avv2050soft.weatherscope.domain.repository.DatabaseRepository
 import javax.inject.Inject
 
@@ -16,7 +17,7 @@ class DatabaseRepositoryImpl @Inject constructor(
         db.locationsDao().insert(locationInDbItem)
     }
 
-    override suspend fun getAllLocationItemsFromDb(): List<LocationItemDto> {
+    override suspend fun getAllLocationItemsFromDb(): List<AutocompleteItem> {
         return db.locationsDao().getAllLocationItems()
     }
 
