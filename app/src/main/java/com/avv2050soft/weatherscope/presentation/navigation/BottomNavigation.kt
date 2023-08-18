@@ -58,8 +58,8 @@ fun BottomNavigation(
                 colors = NavigationBarItemDefaults.colors(
                     selectedIconColor = colorScheme.primary,
                     selectedTextColor = colorScheme.primary,
-                    unselectedIconColor = colorScheme.outline,
-                    unselectedTextColor = colorScheme.outline,
+                    unselectedIconColor = colorScheme.outlineVariant,
+                    unselectedTextColor = colorScheme.outlineVariant,
                     indicatorColor = Color.White
                 )
             )

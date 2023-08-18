@@ -1,11 +1,11 @@
-package com.avv2050soft.weatherscope.data.local.entities
+package com.avv2050soft.weatherscope.data.local.dto
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 
 @Entity(tableName = "location_items")
-data class LocationInDbItem(
+data class LocationItemDto(
     @SerializedName("country")
     val country: String,
     @PrimaryKey

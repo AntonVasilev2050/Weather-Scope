@@ -2,7 +2,7 @@ package com.avv2050soft.weatherscope.data.repository
 
 import android.content.Context
 import com.avv2050soft.weatherscope.data.local.db.WeatherDatabase
-import com.avv2050soft.weatherscope.data.local.entities.LocationInDbItem
+import com.avv2050soft.weatherscope.data.local.dto.LocationItemDto
 import com.avv2050soft.weatherscope.domain.repository.DatabaseRepository
 import javax.inject.Inject
 
@@ -12,11 +12,11 @@ class DatabaseRepositoryImpl @Inject constructor(
 
     private val db = WeatherDatabase.getInstance(context)
 
-    override suspend fun insertInDb(locationInDbItem: LocationInDbItem) {
+    override suspend fun insertInDb(locationInDbItem: LocationItemDto) {
         db.locationsDao().insert(locationInDbItem)
     }
 
-    override suspend fun getAllLocationItemsFromDb(): List<LocationInDbItem> {
+    override suspend fun getAllLocationItemsFromDb(): List<LocationItemDto> {
         return db.locationsDao().getAllLocationItems()
     }
 

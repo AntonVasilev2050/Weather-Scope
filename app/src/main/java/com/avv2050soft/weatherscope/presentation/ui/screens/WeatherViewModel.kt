@@ -6,7 +6,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.avv2050soft.weatherscope.data.local.entities.LocationInDbItem
+import com.avv2050soft.weatherscope.data.local.dto.LocationItemDto
 import com.avv2050soft.weatherscope.data.repository.LocationNameKey
 import com.avv2050soft.weatherscope.domain.models.autocomplete.AutocompleteItem
 import com.avv2050soft.weatherscope.domain.models.forecast.Weather
@@ -109,7 +109,7 @@ class WeatherViewModel @Inject constructor(
     }
 
     fun insertInDatabase(autocompleteItem: AutocompleteItem) {
-        val locationInDbItem = LocationInDbItem(
+        val locationInDbItem = LocationItemDto(
             country = autocompleteItem.country,
             id = autocompleteItem.id,
             lat = autocompleteItem.lat,
@@ -123,7 +123,7 @@ class WeatherViewModel @Inject constructor(
         }
     }
 
-    private var locationsInDb = emptyList<LocationInDbItem>()
+    private var locationsInDb = emptyList<LocationItemDto>()
     private val _locationsInDbStateFlow = MutableStateFlow(locationsInDb)
     val locationsInDbStateFlow = _locationsInDbStateFlow.asStateFlow()
 

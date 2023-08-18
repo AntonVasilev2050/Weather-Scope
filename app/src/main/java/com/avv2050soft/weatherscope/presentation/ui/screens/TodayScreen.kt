@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Divider
@@ -35,9 +36,6 @@ import com.avv2050soft.weatherscope.domain.models.forecast.Hour
 import com.avv2050soft.weatherscope.domain.models.forecast.Weather
 import com.avv2050soft.weatherscope.presentation.utils.CoilImage
 import com.avv2050soft.weatherscope.presentation.utils.formattedDate
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
 import kotlin.math.roundToInt
 
 @Composable
@@ -58,30 +56,40 @@ fun TodayScreen(
                 .padding(start = 16.dp, end = 16.dp, top = 4.dp, bottom = 90.dp)
                 .fillMaxSize(),
         ) {
-            weather?.let {
-                FindLocationRow(
-                    weather = it,
-                    navHostController = navHostController,
-                    weatherViewModel = weatherViewModel
-                )
-                Spacer(modifier = Modifier.height(16.dp))
-                WeatherDateTime(it)
-                Spacer(modifier = Modifier.height(16.dp))
-                TemperatureDayNight(it)
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(start = 8.dp, end = 8.dp),
-                ) {
-                    Temperature(weather = it)
-                    Spacer(modifier = Modifier.width(32.dp))
-                    WeatherConditions(weather = it)
+            if (weather != null){
+                weather?.let {
+                    FindLocationRow(
+                        weather = it,
+                        navHostController = navHostController,
+                        weatherViewModel = weatherViewModel
+                    )
+                    Spacer(modifier = Modifier.height(16.dp))
+                    WeatherDateTime(it)
+                    Spacer(modifier = Modifier.height(16.dp))
+                    TemperatureDayNight(it)
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(start = 8.dp, end = 8.dp),
+                    ) {
+                        Temperature(weather = it)
+                        Spacer(modifier = Modifier.width(32.dp))
+                        WeatherConditions(weather = it)
+                    }
                 }
+                Spacer(modifier = Modifier.height(64.dp))
+                Text(text = "Weather hourly:")
+                Spacer(modifier = Modifier.height(4.dp))
+                hourlyForecast?.let { WeatherHourly(it) }
+            }else{
+                Text(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .wrapContentHeight(),
+                    text = "Data is loading...",
+                    textAlign = TextAlign.Center
+                )
             }
-            Spacer(modifier = Modifier.height(64.dp))
-            Text(text = "Weather hourly:")
-            Spacer(modifier = Modifier.height(4.dp))
-            hourlyForecast?.let { WeatherHourly(it) }
         }
     }
 }

@@ -1,5 +1,6 @@
 package com.avv2050soft.weatherscope.presentation.ui.screens
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -10,7 +11,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
@@ -35,6 +35,7 @@ import androidx.navigation.NavHostController
 import com.avv2050soft.weatherscope.domain.models.forecast.Forecastday
 import com.avv2050soft.weatherscope.domain.models.forecast.Hour
 import com.avv2050soft.weatherscope.presentation.navigation.SavedLocations
+import com.avv2050soft.weatherscope.presentation.ui.theme.LightGreyTransparent
 import com.avv2050soft.weatherscope.presentation.utils.CoilImage
 import com.avv2050soft.weatherscope.presentation.utils.formattedDate
 import com.avv2050soft.weatherscope.presentation.utils.navigateSingleTopTo
@@ -49,8 +50,7 @@ fun ForecastScreen(
 ) {
     weatherViewModel.loadWeather(location)
     val weather by remember { weatherViewModel.weatherStateFlow }.collectAsState()
-    val forecastDay: List<Forecastday> = weather?.forecast?.forecastday ?: emptyList()
-
+    val forecastDayList: List<Forecastday> = weather?.forecast?.forecastday ?: emptyList()
     Column {
         Text(
             modifier = Modifier
@@ -67,7 +67,7 @@ fun ForecastScreen(
                 .fillMaxHeight()
                 .padding(top = 8.dp, bottom = 70.dp)
         ) {
-            items(items = forecastDay) { forecastDay ->
+            items(items = forecastDayList) { forecastDay ->
                 var isExpanded by rememberSaveable { mutableStateOf(false) }
                 Column(
                     modifier = Modifier
@@ -191,7 +191,9 @@ fun WeatherDayHourly(forecastDayHour: List<Hour>, isExpanded: Boolean) {
         Column {
             Spacer(modifier = Modifier.height(8.dp))
             Text(text = "Weather hourly:", color = Color.Gray)
-            LazyRow {
+            LazyRow (
+                modifier = Modifier.background(LightGreyTransparent)
+            ){
                 items(items = forecastDayHour) {
                     Column(
                         verticalArrangement = Arrangement.Center,

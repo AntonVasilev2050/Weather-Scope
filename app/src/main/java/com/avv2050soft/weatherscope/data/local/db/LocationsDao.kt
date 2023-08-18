@@ -4,15 +4,15 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.avv2050soft.weatherscope.data.local.entities.LocationInDbItem
+import com.avv2050soft.weatherscope.data.local.dto.LocationItemDto
 
 @Dao
 interface LocationsDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insert(locationInDbItem: LocationInDbItem)
+    suspend fun insert(locationItemDto: LocationItemDto)
 
     @Query("SELECT * FROM location_items")
-    suspend fun getAllLocationItems(): List<LocationInDbItem>
+    suspend fun getAllLocationItems(): List<LocationItemDto>
 
     @Query("DELETE FROM location_items")
     suspend fun deleteAllLocationItems()
