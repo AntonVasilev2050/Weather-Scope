@@ -99,6 +99,7 @@ fun TodayScreen(
 private fun WeatherDateTime(weather: Weather) {
     Text(
         text = weather.current.lastUpdatedEpoch.formattedDate("dd MMMM, HH:mm"),
+        fontSize = 20.sp,
         fontWeight = FontWeight.ExtraBold
     )
 }

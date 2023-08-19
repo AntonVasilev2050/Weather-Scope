@@ -115,17 +115,8 @@ class WeatherViewModel @Inject constructor(
     }
 
     fun insertInDatabase(autocompleteItem: AutocompleteItem) {
-        val locationItemDto = LocationItemDto(
-            country = autocompleteItem.country,
-            id = autocompleteItem.id,
-            lat = autocompleteItem.lat,
-            lon = autocompleteItem.lon,
-            name = autocompleteItem.name,
-            region = autocompleteItem.region,
-            url = autocompleteItem.url
-        )
         viewModelScope.launch {
-            insertInDatabaseUseCase.insertInDb(locationItemDto)
+            insertInDatabaseUseCase.insertInDb(autocompleteItem)
         }
     }
 
