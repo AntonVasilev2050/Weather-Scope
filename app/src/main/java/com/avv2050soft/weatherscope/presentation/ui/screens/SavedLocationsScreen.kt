@@ -36,6 +36,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.avv2050soft.weatherscope.presentation.navigation.AutocompleteLocations
 import com.avv2050soft.weatherscope.presentation.utils.navigateSingleTopTo
@@ -43,9 +44,9 @@ import com.avv2050soft.weatherscope.presentation.utils.navigateSingleTopTo
 @Composable
 fun SavedLocationsScreen(
     modifier: Modifier,
-    weatherViewModel: WeatherViewModel,
     navHostController: NavHostController,
 ) {
+    val weatherViewModel = hiltViewModel<WeatherViewModel>()
     val allLocationItemsFromDb by remember { weatherViewModel.locationsInDbStateFlow }.collectAsState()
 
     Column(
@@ -53,7 +54,7 @@ fun SavedLocationsScreen(
             .padding(all = 8.dp)
             .fillMaxWidth(),
     ) {
-        FindLocationEditTextSaved(weatherViewModel, navHostController)
+        FindLocationEditTextSaved(navHostController)
         Text(text = "Saved Locations")
         LazyColumn(
             modifier = Modifier
@@ -120,9 +121,9 @@ fun SavedLocationsScreen(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FindLocationEditTextSaved(
-    weatherViewModel: WeatherViewModel,
     navHostController: NavHostController
 ) {
+    val weatherViewModel = hiltViewModel<WeatherViewModel>()
     weatherViewModel.getAllLocationItemsFromDb()
     Column()
     {

@@ -36,14 +36,12 @@ import com.avv2050soft.weatherscope.presentation.utils.navigateSingleTopTo
 @Composable
 fun MainScreen(
     navController: NavHostController,
-    weatherViewModel: WeatherViewModel,
 ) {
     Scaffold(
         bottomBar = { BottomNavigation(navController = navController) }
     ) {
         WeatherScopeNavHost(
             navHostController = navController,
-            weatherViewModel,
         )
     }
 }
@@ -52,7 +50,6 @@ fun MainScreen(
 fun FindLocationRow(
     weather: Weather,
     navHostController: NavHostController,
-    weatherViewModel: WeatherViewModel
 ) {
     Row(
         modifier = Modifier

@@ -31,6 +31,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.avv2050soft.weatherscope.domain.models.forecast.Forecastday
 import com.avv2050soft.weatherscope.domain.models.forecast.Hour
@@ -44,10 +45,11 @@ import kotlin.math.roundToInt
 @Composable
 fun ForecastScreen(
     modifier: Modifier = Modifier,
-    weatherViewModel: WeatherViewModel,
     navHostController: NavHostController,
-    location: String
 ) {
+    val weatherViewModel = hiltViewModel<WeatherViewModel>()
+    weatherViewModel.getLocationFromPreferences()
+    val location by remember { weatherViewModel.locationStateFlow }.collectAsState()
     weatherViewModel.loadWeather(location)
     val weather by remember { weatherViewModel.weatherStateFlow }.collectAsState()
     val forecastDayList: List<Forecastday> = weather?.forecast?.forecastday ?: emptyList()

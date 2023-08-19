@@ -44,6 +44,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.avv2050soft.weatherscope.presentation.navigation.SavedLocations
 import com.avv2050soft.weatherscope.presentation.utils.navigateSingleTopTo
@@ -52,9 +53,9 @@ import com.avv2050soft.weatherscope.presentation.utils.navigateSingleTopTo
 @Composable
 fun AutocompleteLocationScreen(
     modifier: Modifier,
-    weatherViewModel: WeatherViewModel,
     navHostController: NavHostController,
 ) {
+    val weatherViewModel = hiltViewModel<WeatherViewModel>()
     val autocomplete by remember { weatherViewModel.autocompleteStateFlow }.collectAsState()
 
     Column(
@@ -62,7 +63,7 @@ fun AutocompleteLocationScreen(
             .padding(all = 8.dp)
             .fillMaxWidth(),
     ) {
-        FindLocationEditTextAutocomplete(weatherViewModel, navHostController)
+        FindLocationEditTextAutocomplete(navHostController)
         Text(text = "Autocomplete")
         LazyColumn(
             modifier = Modifier
@@ -134,9 +135,9 @@ fun AutocompleteLocationScreen(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FindLocationEditTextAutocomplete(
-    weatherViewModel: WeatherViewModel,
     navHostController: NavHostController
 ) {
+    val weatherViewModel = hiltViewModel<WeatherViewModel>()
     var text by rememberSaveable { mutableStateOf(weatherViewModel.editTextValue) }
     val focusRequester = remember { FocusRequester() }
     weatherViewModel.loadAutocomplete(text)

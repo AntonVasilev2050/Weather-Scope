@@ -1,11 +1,9 @@
 package com.avv2050soft.weatherscope.presentation.navigation
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -20,10 +18,9 @@ import com.avv2050soft.weatherscope.presentation.ui.screens.WeatherViewModel
 @Composable
 fun WeatherScopeNavHost(
     navHostController: NavHostController,
-    weatherViewModel: WeatherViewModel,
 ) {
+    val weatherViewModel = hiltViewModel<WeatherViewModel>()
     weatherViewModel.getLocationFromPreferences()
-    val location by remember {weatherViewModel.locationStateFlow}.collectAsState()
 
     NavHost(
         navController = navHostController,
@@ -32,9 +29,7 @@ fun WeatherScopeNavHost(
         composable("today_screen") {
             TodayScreen(
                 modifier = Modifier,
-                weatherViewModel = weatherViewModel,
-                navHostController = navHostController,
-                location = location
+                navHostController = navHostController
             )
         }
         composable("tomorrow_screen") {
@@ -43,22 +38,18 @@ fun WeatherScopeNavHost(
         composable("forecast_screen") {
             ForecastScreen(
                 modifier = Modifier,
-                weatherViewModel = weatherViewModel,
                 navHostController = navHostController,
-                location = location
             )
         }
         composable("saved_locations_screen") {
             SavedLocationsScreen(
                 modifier = Modifier,
-                weatherViewModel = weatherViewModel,
                 navHostController = navHostController,
             )
         }
         composable("autocomplete_location_screen"){
             AutocompleteLocationScreen(
                 modifier = Modifier,
-                weatherViewModel = weatherViewModel,
                 navHostController = navHostController,
             )
         }
