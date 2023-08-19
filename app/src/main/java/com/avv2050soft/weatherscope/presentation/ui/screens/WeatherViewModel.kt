@@ -6,15 +6,13 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.avv2050soft.weatherscope.data.local.dto.LocationItemDto
-import com.avv2050soft.weatherscope.data.repository.LocationNameKey
 import com.avv2050soft.weatherscope.domain.models.autocomplete.AutocompleteItem
 import com.avv2050soft.weatherscope.domain.models.forecast.Weather
-import com.avv2050soft.weatherscope.domain.repository.DatabaseRepository
 import com.avv2050soft.weatherscope.domain.repository.SharedPreferencesRepository
+import com.avv2050soft.weatherscope.domain.usecases.DeleteLocationItemFromDatabaseByIdUseCase
 import com.avv2050soft.weatherscope.domain.usecases.GetAllLocationItemsFromDatabaseUseCase
-import com.avv2050soft.weatherscope.domain.usecases.GetWeatherUseCase
 import com.avv2050soft.weatherscope.domain.usecases.GetAutocompleteListUseCase
+import com.avv2050soft.weatherscope.domain.usecases.GetWeatherUseCase
 import com.avv2050soft.weatherscope.domain.usecases.InsertInDatabaseUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
@@ -24,14 +22,16 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+
+const val LocationNameKey = "location name key"
 @HiltViewModel
 class WeatherViewModel @Inject constructor(
     private val sharedPreferencesRepository: SharedPreferencesRepository,
-    private val databaseRepository: DatabaseRepository,
     private val getWeatherUseCase: GetWeatherUseCase,
     private val getAutocompleteListUseCase: GetAutocompleteListUseCase,
     private val getAllLocationItemsFromDatabaseUseCase: GetAllLocationItemsFromDatabaseUseCase,
-    private val insertInDatabaseUseCase: InsertInDatabaseUseCase
+    private val insertInDatabaseUseCase: InsertInDatabaseUseCase,
+    private val deleteLocationItemFromDatabaseByIdUseCase: DeleteLocationItemFromDatabaseByIdUseCase
 
 ) : ViewModel() {
     private var weather: Weather? = null
@@ -141,7 +141,7 @@ class WeatherViewModel @Inject constructor(
 
     fun deleteLocationItemFromDbById(itemId: Int){
         viewModelScope.launch {
-            databaseRepository.deleteLocationItemFromDbById(itemId)
+            deleteLocationItemFromDatabaseByIdUseCase.deleteLocationItemFromDbById(itemId)
         }
 
     }
