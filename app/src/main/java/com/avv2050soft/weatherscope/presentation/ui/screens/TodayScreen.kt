@@ -98,7 +98,7 @@ fun TodayScreen(
 @Composable
 private fun WeatherDateTime(weather: Weather) {
     Text(
-        text = weather.current.lastUpdatedEpoch.formattedDate("dd MMMM, HH:mm"),
+        text = weather.current.lastUpdatedEpoch.formattedDate("dd MMMM, HH:mm", weather.location.tzId),
         fontSize = 20.sp,
         fontWeight = FontWeight.ExtraBold
     )

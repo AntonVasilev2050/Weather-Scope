@@ -103,7 +103,7 @@ fun BasicForecast(forecastDay: Forecastday) {
         ) {
             Column {
                 Text(
-                    text = forecastDay.dateEpoch.formattedDate("EEEE, dd MMM"),
+                    text = forecastDay.dateEpoch.formattedDate("EEEE, dd MMM", "" ),
                     fontWeight = FontWeight.SemiBold
                 )
                 Text(text = forecastDay.day.condition.text)
