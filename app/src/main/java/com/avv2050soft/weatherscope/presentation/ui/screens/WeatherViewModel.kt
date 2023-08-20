@@ -9,7 +9,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.avv2050soft.weatherscope.domain.models.autocomplete.AutocompleteItem
 import com.avv2050soft.weatherscope.domain.models.forecast.Weather
-import com.avv2050soft.weatherscope.domain.repository.SharedPreferencesRepository
 import com.avv2050soft.weatherscope.domain.usecases.DeleteLocationItemFromDatabaseByIdUseCase
 import com.avv2050soft.weatherscope.domain.usecases.GetAllLocationItemsFromDatabaseUseCase
 import com.avv2050soft.weatherscope.domain.usecases.GetAutocompleteListUseCase
@@ -28,7 +27,6 @@ const val LocationNameKey = "location name key"
 
 @HiltViewModel
 class WeatherViewModel @Inject constructor(
-    private val sharedPreferencesRepository: SharedPreferencesRepository,
     private val getLocationFromPreferencesUseCase: GetLocationFromPreferencesUseCase,
     private val saveLocationToPreferencesUseCase: SaveLocationToPreferencesUseCase,
     private val getWeatherUseCase: GetWeatherUseCase,

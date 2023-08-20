@@ -2,6 +2,7 @@ package com.avv2050soft.weatherscope.di
 
 import android.app.Application
 import android.content.Context
+import com.avv2050soft.weatherscope.data.mappers.AutocompleteItemMapper
 import com.avv2050soft.weatherscope.data.repository.DatabaseRepositoryImpl
 import com.avv2050soft.weatherscope.data.repository.SharedPreferencesRepositoryImp
 import com.avv2050soft.weatherscope.data.repository.WeatherRepositoryImpl
@@ -34,12 +35,18 @@ class DataModule {
     @Provides
     @Singleton
     fun provideDatabaseRepository(@ApplicationContext context: Context) : DatabaseRepository{
-        return DatabaseRepositoryImpl(context = context)
+        return DatabaseRepositoryImpl(context = context, mapper = AutocompleteItemMapper())
     }
 
     @Provides
     @Singleton
     fun provideContext(application: Application): Context {
         return application.applicationContext
+    }
+
+    @Provides
+    @Singleton
+    fun provideAutocompleteItemMapper(): AutocompleteItemMapper{
+        return AutocompleteItemMapper()
     }
 }
