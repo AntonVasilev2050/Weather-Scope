@@ -46,9 +46,9 @@ fun TodayScreen(
 ) {
     val weatherViewModel = hiltViewModel<WeatherViewModel>()
     weatherViewModel.getLocationFromPreferences()
-    val location by remember { weatherViewModel.locationStateFlow }.collectAsState()
+    val location by remember { weatherViewModel.locationStateFlow }
     weatherViewModel.loadWeather(location)
-    val weather by remember { weatherViewModel.weatherStateFlow }.collectAsState()
+    val weather by remember { weatherViewModel.weatherStateFlow }
     val hourlyForecast = weather?.forecast?.forecastday?.get(0)?.hour
     Surface(
         color = colorScheme.primary
@@ -59,23 +59,23 @@ fun TodayScreen(
                 .fillMaxSize(),
         ) {
             if (weather != null) {
-                weather?.let {
+                weather?.let { weather ->
                     FindLocationRow(
-                        weather = it,
+                        weather = weather,
                         navHostController = navHostController,
                     )
                     Spacer(modifier = Modifier.height(16.dp))
-                    WeatherDateTime(it)
+                    WeatherDateTime(weather)
                     Spacer(modifier = Modifier.height(16.dp))
-                    TemperatureDayNight(it)
+                    TemperatureDayNight(weather)
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(start = 8.dp, end = 8.dp),
                     ) {
-                        Temperature(weather = it)
+                        Temperature(weather = weather)
                         Spacer(modifier = Modifier.width(32.dp))
-                        WeatherConditions(weather = it)
+                        WeatherConditions(weather = weather)
                     }
                 }
                 Spacer(modifier = Modifier.height(64.dp))

@@ -18,7 +18,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -49,9 +48,9 @@ fun ForecastScreen(
 ) {
     val weatherViewModel = hiltViewModel<WeatherViewModel>()
     weatherViewModel.getLocationFromPreferences()
-    val location by remember { weatherViewModel.locationStateFlow }.collectAsState()
+    val location by remember { weatherViewModel.locationStateFlow }
     weatherViewModel.loadWeather(location)
-    val weather by remember { weatherViewModel.weatherStateFlow }.collectAsState()
+    val weather by remember { weatherViewModel.weatherStateFlow }
     val forecastDayList: List<Forecastday> = weather?.forecast?.forecastday ?: emptyList()
     Column {
         Text(

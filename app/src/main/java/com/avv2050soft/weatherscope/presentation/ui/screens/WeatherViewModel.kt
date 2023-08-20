@@ -1,6 +1,7 @@
 package com.avv2050soft.weatherscope.presentation.ui.screens
 
 import android.util.Log
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -12,21 +13,24 @@ import com.avv2050soft.weatherscope.domain.repository.SharedPreferencesRepositor
 import com.avv2050soft.weatherscope.domain.usecases.DeleteLocationItemFromDatabaseByIdUseCase
 import com.avv2050soft.weatherscope.domain.usecases.GetAllLocationItemsFromDatabaseUseCase
 import com.avv2050soft.weatherscope.domain.usecases.GetAutocompleteListUseCase
+import com.avv2050soft.weatherscope.domain.usecases.GetLocationFromPreferencesUseCase
 import com.avv2050soft.weatherscope.domain.usecases.GetWeatherUseCase
 import com.avv2050soft.weatherscope.domain.usecases.InsertInDatabaseUseCase
+import com.avv2050soft.weatherscope.domain.usecases.SaveLocationToPreferencesUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 
 const val LocationNameKey = "location name key"
+
 @HiltViewModel
 class WeatherViewModel @Inject constructor(
     private val sharedPreferencesRepository: SharedPreferencesRepository,
+    private val getLocationFromPreferencesUseCase: GetLocationFromPreferencesUseCase,
+    private val saveLocationToPreferencesUseCase: SaveLocationToPreferencesUseCase,
     private val getWeatherUseCase: GetWeatherUseCase,
     private val getAutocompleteListUseCase: GetAutocompleteListUseCase,
     private val getAllLocationItemsFromDatabaseUseCase: GetAllLocationItemsFromDatabaseUseCase,
@@ -35,19 +39,19 @@ class WeatherViewModel @Inject constructor(
 
 ) : ViewModel() {
     private var weather: Weather? = null
-    private val _weatherStateFlow = MutableStateFlow(weather)
-    val weatherStateFlow = _weatherStateFlow.asStateFlow()
+    var weatherStateFlow: MutableState<Weather?> = mutableStateOf(weather)
 
     private val _message = Channel<String>()
     val message = _message.receiveAsFlow()
 
     private var location: String = ""
-    private val _locationStateFlow = MutableStateFlow(location)
-    val locationStateFlow = _locationStateFlow.asStateFlow()
+    val locationStateFlow: MutableState<String> = mutableStateOf(location)
 
-    private var autocomplete = emptyList<AutocompleteItem>()
-    private val _autocompleteStateFlow = MutableStateFlow(autocomplete)
-    val autocompleteStateFlow = _autocompleteStateFlow.asStateFlow()
+    private var autocomplete: List<AutocompleteItem> = emptyList<AutocompleteItem>()
+    val autocompleteStateFlow: MutableState<List<AutocompleteItem>> = mutableStateOf(autocomplete)
+
+    private var locationsInDb : List<AutocompleteItem> = emptyList<AutocompleteItem>()
+    val locationsInDbStateFlow : MutableState<List<AutocompleteItem>> = mutableStateOf(locationsInDb)
 
     var editTextValue by mutableStateOf("")
         private set
@@ -61,7 +65,7 @@ class WeatherViewModel @Inject constructor(
             runCatching {
                 autocomplete = getAutocompleteListUseCase.search(location)
             }
-                .onSuccess { _autocompleteStateFlow.value = autocomplete }
+                .onSuccess { autocompleteStateFlow.value = autocomplete }
                 .onFailure {
                     _message.send("An error occurred when getting autocomplete")
                     Log.d("data_test", it.message.toString())
@@ -71,7 +75,7 @@ class WeatherViewModel @Inject constructor(
 
     fun loadWeather(location: String) {
         viewModelScope.launch {
-            runCatching {
+            kotlin.runCatching {
                 weather = getWeatherUseCase.getWeather(
                     location = location,
                     days = 14,
@@ -79,8 +83,7 @@ class WeatherViewModel @Inject constructor(
                     alerts = "yes",
                     lang = "en"
                 )
-            }
-                .onSuccess { _weatherStateFlow.value = weather }
+            }.onSuccess { weatherStateFlow.value = weather }
                 .onFailure {
                     _message.send("An error occurred when getting weather")
                     Log.d("data_test", it.message.toString())
@@ -91,9 +94,9 @@ class WeatherViewModel @Inject constructor(
     fun getLocationFromPreferences() {
         viewModelScope.launch {
             runCatching {
-                location = sharedPreferencesRepository.getString(LocationNameKey, "Krasnodar") ?: ""
+                location = getLocationFromPreferencesUseCase.getString(LocationNameKey, "Krasnodar") ?: ""
             }
-                .onSuccess { _locationStateFlow.value = location }
+                .onSuccess { locationStateFlow.value = location }
                 .onFailure {
                     _message.send("An error occurred when getting location from preferences")
                     Log.d("data_test", it.message.toString())
@@ -104,7 +107,7 @@ class WeatherViewModel @Inject constructor(
     fun saveLocationToPreferences(location: String) {
         viewModelScope.launch {
             runCatching {
-                sharedPreferencesRepository.saveString(LocationNameKey, location)
+                saveLocationToPreferencesUseCase.saveString(LocationNameKey, location)
             }
                 .onSuccess { _message.send("Success when saving location to the preferences") }
                 .onFailure {
@@ -120,17 +123,13 @@ class WeatherViewModel @Inject constructor(
         }
     }
 
-    private var locationsInDb = emptyList<AutocompleteItem>()
-    private val _locationsInDbStateFlow = MutableStateFlow(locationsInDb)
-    val locationsInDbStateFlow = _locationsInDbStateFlow.asStateFlow()
-
     fun getAllLocationItemsFromDb() {
         viewModelScope.launch {
             runCatching {
                 locationsInDb = getAllLocationItemsFromDatabaseUseCase.getAllLocationItemsFromDb()
             }
                 .onSuccess {
-                    _locationsInDbStateFlow.value = locationsInDb
+                    locationsInDbStateFlow.value = locationsInDb
                 }
                 .onFailure {
                     _message.send("An error occurred when ")
@@ -139,7 +138,7 @@ class WeatherViewModel @Inject constructor(
         }
     }
 
-    fun deleteLocationItemFromDbById(itemId: Int){
+    fun deleteLocationItemFromDbById(itemId: Int) {
         viewModelScope.launch {
             deleteLocationItemFromDatabaseByIdUseCase.deleteLocationItemFromDbById(itemId)
         }

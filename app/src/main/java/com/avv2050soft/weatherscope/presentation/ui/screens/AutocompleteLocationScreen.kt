@@ -28,7 +28,6 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -56,7 +55,7 @@ fun AutocompleteLocationScreen(
     navHostController: NavHostController,
 ) {
     val weatherViewModel = hiltViewModel<WeatherViewModel>()
-    val autocomplete by remember { weatherViewModel.autocompleteStateFlow }.collectAsState()
+    val autocomplete by remember { weatherViewModel.autocompleteStateFlow }
 
     Column(
         modifier = Modifier
