@@ -22,7 +22,6 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-
 const val LocationNameKey = "location name key"
 
 @HiltViewModel
@@ -48,8 +47,8 @@ class WeatherViewModel @Inject constructor(
     private var autocomplete: List<AutocompleteItem> = emptyList<AutocompleteItem>()
     val autocompleteStateFlow: MutableState<List<AutocompleteItem>> = mutableStateOf(autocomplete)
 
-    private var locationsInDb : List<AutocompleteItem> = emptyList<AutocompleteItem>()
-    val locationsInDbStateFlow : MutableState<List<AutocompleteItem>> = mutableStateOf(locationsInDb)
+    private var locationsInDb: List<AutocompleteItem> = emptyList<AutocompleteItem>()
+    val locationsInDbStateFlow: MutableState<List<AutocompleteItem>> = mutableStateOf(locationsInDb)
 
     var editTextValue by mutableStateOf("")
         private set
@@ -92,7 +91,8 @@ class WeatherViewModel @Inject constructor(
     fun getLocationFromPreferences() {
         viewModelScope.launch {
             runCatching {
-                location = getLocationFromPreferencesUseCase.getString(LocationNameKey, "Krasnodar") ?: ""
+                location =
+                    getLocationFromPreferencesUseCase.getString(LocationNameKey, "Krasnodar") ?: ""
             }
                 .onSuccess { locationStateFlow.value = location }
                 .onFailure {
@@ -140,6 +140,5 @@ class WeatherViewModel @Inject constructor(
         viewModelScope.launch {
             deleteLocationItemFromDatabaseByIdUseCase.deleteLocationItemFromDbById(itemId)
         }
-
     }
 }
