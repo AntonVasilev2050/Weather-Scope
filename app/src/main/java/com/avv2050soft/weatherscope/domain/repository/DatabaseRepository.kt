@@ -1,6 +1,5 @@
 package com.avv2050soft.weatherscope.domain.repository
 
-import com.avv2050soft.weatherscope.data.local.dto.LocationItemDto
 import com.avv2050soft.weatherscope.domain.models.autocomplete.AutocompleteItem
 
 interface DatabaseRepository {

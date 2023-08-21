@@ -1,7 +1,6 @@
 package com.avv2050soft.weatherscope.data.repository
 
-import com.avv2050soft.weatherscope.data.api.WeatherApi
-import com.avv2050soft.weatherscope.domain.models.autocomplete.Autocomplete
+import com.avv2050soft.weatherscope.data.network.api.WeatherApi
 import com.avv2050soft.weatherscope.domain.models.autocomplete.AutocompleteItem
 import com.avv2050soft.weatherscope.domain.models.forecast.Weather
 import com.avv2050soft.weatherscope.domain.repository.WeatherRepository
