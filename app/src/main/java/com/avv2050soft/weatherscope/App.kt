@@ -1,4 +1,4 @@
-package com.avv2050soft.weatherscope.presentation
+package com.avv2050soft.weatherscope
 
 import android.app.Application
 import dagger.hilt.android.HiltAndroidApp

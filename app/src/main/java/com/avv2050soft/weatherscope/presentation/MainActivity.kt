@@ -1,4 +1,4 @@
-package com.avv2050soft.weatherscope
+package com.avv2050soft.weatherscope.presentation
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
