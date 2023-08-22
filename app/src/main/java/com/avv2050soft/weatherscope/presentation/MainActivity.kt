@@ -25,9 +25,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
     private lateinit var fusedClient: FusedLocationProviderClient
-    private var currentLatitude = 0.0
-    private var currentLongitude = 0.0
-    val weatherViewModel: WeatherViewModel by viewModels()
+    private val weatherViewModel: WeatherViewModel by viewModels()
 
     private val launcher = registerForActivityResult(
         ActivityResultContracts.RequestMultiplePermissions()
@@ -41,8 +39,8 @@ class MainActivity : ComponentActivity() {
     private fun startLocation() {
         val result = fusedClient.lastLocation
         result.addOnSuccessListener {
-            currentLatitude = it.latitude
-            currentLongitude = it.longitude
+            val currentLatitude = it.latitude
+            val currentLongitude = it.longitude
             weatherViewModel.saveLocationToPreferences("$currentLatitude,$currentLongitude")
         }
     }
@@ -65,6 +63,7 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             WeatherScopeTheme {
+                fusedClient = LocationServices.getFusedLocationProviderClient(this)
                 val navController = rememberNavController()
                 Surface(
                     modifier = Modifier.fillMaxSize(),
@@ -74,7 +73,6 @@ class MainActivity : ComponentActivity() {
                         navController = navController,
                     )
                 }
-                fusedClient = LocationServices.getFusedLocationProviderClient(this)
             }
         }
     }
