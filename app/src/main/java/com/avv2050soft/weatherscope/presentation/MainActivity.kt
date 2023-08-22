@@ -4,7 +4,6 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.os.Looper
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
@@ -14,17 +13,12 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import androidx.core.content.ContextCompat
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.rememberNavController
 import com.avv2050soft.weatherscope.presentation.ui.screens.MainScreen
 import com.avv2050soft.weatherscope.presentation.ui.screens.WeatherViewModel
 import com.avv2050soft.weatherscope.presentation.ui.theme.WeatherScopeTheme
 import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationCallback
-import com.google.android.gms.location.LocationRequest
-import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
-import com.google.android.gms.location.Priority
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -45,30 +39,24 @@ class MainActivity : ComponentActivity() {
 
     @SuppressLint("MissingPermission")
     private fun startLocation() {
-        val request = LocationRequest.Builder(
-            Priority.PRIORITY_BALANCED_POWER_ACCURACY,
-            500
-        ).build()
-
-        fusedClient.requestLocationUpdates(
-            request,
-            locationCallback,
-            Looper.getMainLooper()
-        )
+        val result = fusedClient.lastLocation
+        result.addOnSuccessListener {
+            currentLatitude = it.latitude
+            currentLongitude = it.longitude
+            weatherViewModel.saveLocationToPreferences("$currentLatitude,$currentLongitude")
+        }
     }
 
-    private val locationCallback = object : LocationCallback() {
-        override fun onLocationResult(result: LocationResult) {
-            super.onLocationResult(result)
-            result.lastLocation?.let {
-                currentLatitude = it.latitude
-                currentLongitude = it.longitude
-                weatherViewModel.saveLocationToPreferences("$currentLatitude,$currentLongitude")
-//                val weather = weatherViewModel.weatherStateFlow.value
-//                val currentLocation = "${weather?.location?.lat},${weather?.location?.lon},${weather?.location?.name},${weather?.location?.country}"
-//                weatherViewModel.loadWeather(currentLocation)
-//                weatherViewModel.saveLocationToPreferences(currentLocation)
-            }
+    fun checkPermissions() {
+        if (REQUIRED_PERMISSIONS.all { permission ->
+                ContextCompat.checkSelfPermission(
+                    this,
+                    permission
+                ) == PackageManager.PERMISSION_GRANTED
+            }) {
+            startLocation()
+        } else {
+            launcher.launch(REQUIRED_PERMISSIONS)
         }
     }
 
@@ -88,24 +76,6 @@ class MainActivity : ComponentActivity() {
                 }
                 fusedClient = LocationServices.getFusedLocationProviderClient(this)
             }
-        }
-    }
-
-    override fun onStop() {
-        super.onStop()
-        fusedClient.removeLocationUpdates(locationCallback)
-    }
-
-    fun checkPermissions() {
-        if (REQUIRED_PERMISSIONS.all { permission ->
-                ContextCompat.checkSelfPermission(
-                    this,
-                    permission
-                ) == PackageManager.PERMISSION_GRANTED
-            }) {
-            startLocation()
-        } else {
-            launcher.launch(REQUIRED_PERMISSIONS)
         }
     }
 

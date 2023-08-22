@@ -59,7 +59,7 @@ fun ForecastScreen(
                 .padding(top = 4.dp)
                 .wrapContentHeight()
                 .clickable { navHostController.navigateSingleTopTo(SavedLocations.route) },
-            text = "Weather forecast for \n $location",
+            text = "Weather forecast for \n ${weather?.location?.name}, ${weather?.location?.country}",
             textAlign = TextAlign.Center,
             fontWeight = FontWeight.Bold
         )

@@ -22,7 +22,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -30,7 +29,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import com.avv2050soft.weatherscope.domain.models.forecast.Weather
 import com.avv2050soft.weatherscope.presentation.MainActivity
 import com.avv2050soft.weatherscope.presentation.navigation.BottomNavigation
 import com.avv2050soft.weatherscope.presentation.navigation.SavedLocations
@@ -56,13 +54,12 @@ fun MainScreen(
 
 @Composable
 fun FindLocationRow(
-    weather: Weather,
     navHostController: NavHostController,
 ) {
     val activity = LocalContext.current.getActivity<MainActivity>()
     val weatherViewModel = hiltViewModel<WeatherViewModel>()
     val location by remember { weatherViewModel.locationStateFlow }
-    val currentLocationWeather by remember { weatherViewModel.weatherStateFlow }
+    val weather by remember { weatherViewModel.weatherStateFlow }
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -91,7 +88,7 @@ fun FindLocationRow(
                     modifier = Modifier
                         .wrapContentHeight()
                         .padding(start = 8.dp),
-                    text = "${weather.location.name}, ${weather.location.country}",
+                    text = "${weather?.location?.name}, ${weather?.location?.country}",
                     textAlign = TextAlign.Left,
                     maxLines = 2
                 )
@@ -101,15 +98,10 @@ fun FindLocationRow(
             modifier = Modifier
                 .clickable {
                     activity?.checkPermissions()
-//
-//                    weatherViewModel.getLocationFromPreferences()
-//                    weatherViewModel.loadWeather(location)
-//
-//                    val locationString =
-//                        "${currentLocationWeather?.location?.lat},${currentLocationWeather?.location?.lon},${currentLocationWeather?.location?.name},${currentLocationWeather?.location?.country}"
-//                    weatherViewModel.saveLocationToPreferences(locationString)
-//                    weatherViewModel.loadWeather(location)
-//                    navHostController.navigate(route = TodayScreen.route)
+                    weatherViewModel.getLocationFromPreferences()
+                    weatherViewModel.loadWeather(location)
+
+                    navHostController.navigateSingleTopTo(route = TodayScreen.route)
                 }
                 .size(FindLocationHeight),
             imageVector = Icons.TwoTone.Place,

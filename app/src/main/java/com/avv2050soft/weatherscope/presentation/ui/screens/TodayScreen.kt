@@ -19,7 +19,6 @@ import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -60,10 +59,7 @@ fun TodayScreen(
         ) {
             if (weather != null) {
                 weather?.let { weather ->
-                    FindLocationRow(
-                        weather = weather,
-                        navHostController = navHostController,
-                    )
+                    FindLocationRow(navHostController = navHostController)
                     Spacer(modifier = Modifier.height(16.dp))
                     WeatherDateTime(weather)
                     Spacer(modifier = Modifier.height(16.dp))
@@ -98,7 +94,10 @@ fun TodayScreen(
 @Composable
 private fun WeatherDateTime(weather: Weather) {
     Text(
-        text = weather.current.lastUpdatedEpoch.formattedDate("dd MMMM, HH:mm", weather.location.tzId),
+        text = weather.current.lastUpdatedEpoch.formattedDate(
+            "dd MMMM, HH:mm",
+            weather.location.tzId
+        ),
         fontSize = 20.sp,
         fontWeight = FontWeight.ExtraBold
     )
