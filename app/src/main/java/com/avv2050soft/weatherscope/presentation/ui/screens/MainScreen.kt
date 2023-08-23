@@ -27,7 +27,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.avv2050soft.weatherscope.presentation.MainActivity
 import com.avv2050soft.weatherscope.presentation.navigation.BottomNavigation
@@ -42,12 +41,14 @@ import com.avv2050soft.weatherscope.presentation.utils.navigateSingleTopTo
 @Composable
 fun MainScreen(
     navController: NavHostController,
+    weatherViewModel: WeatherViewModel
 ) {
     Scaffold(
         bottomBar = { BottomNavigation(navController = navController) }
     ) {
         WeatherScopeNavHost(
             navHostController = navController,
+            weatherViewModel
         )
     }
 }
@@ -55,9 +56,9 @@ fun MainScreen(
 @Composable
 fun FindLocationRow(
     navHostController: NavHostController,
+    weatherViewModel: WeatherViewModel
 ) {
     val activity = LocalContext.current.getActivity<MainActivity>()
-    val weatherViewModel = hiltViewModel<WeatherViewModel>()
     val location by remember { weatherViewModel.locationStateFlow }
     val weather by remember { weatherViewModel.weatherStateFlow }
     Row(
@@ -100,7 +101,6 @@ fun FindLocationRow(
                     activity?.checkPermissions()
                     weatherViewModel.getLocationFromPreferences()
                     weatherViewModel.loadWeather(location)
-
                     navHostController.navigateSingleTopTo(route = TodayScreen.route)
                 }
                 .size(FindLocationHeight),

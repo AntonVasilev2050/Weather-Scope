@@ -1,12 +1,12 @@
 package com.avv2050soft.weatherscope.presentation.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.ExperimentalComposeUiApi
-import androidx.compose.ui.Modifier
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
 import com.avv2050soft.weatherscope.presentation.ui.screens.AutocompleteLocationScreen
 import com.avv2050soft.weatherscope.presentation.ui.screens.ForecastScreen
 import com.avv2050soft.weatherscope.presentation.ui.screens.SavedLocationsScreen
@@ -18,39 +18,48 @@ import com.avv2050soft.weatherscope.presentation.ui.screens.WeatherViewModel
 @Composable
 fun WeatherScopeNavHost(
     navHostController: NavHostController,
+    weatherViewModel: WeatherViewModel,
 ) {
-    val weatherViewModel = hiltViewModel<WeatherViewModel>()
     weatherViewModel.getLocationFromPreferences()
-
+    val navBackStackEntry by navHostController.currentBackStackEntryAsState()
+    val screenKey = navBackStackEntry?.destination?.route ?: ""
     NavHost(
         navController = navHostController,
         startDestination = "today_screen",
     ) {
         composable("today_screen") {
             TodayScreen(
-                modifier = Modifier,
-                navHostController = navHostController
+                navHostController = navHostController,
+                screenKey = screenKey,
+                weatherViewModel = weatherViewModel
             )
         }
         composable("tomorrow_screen") {
-            TomorrowScreen()
+            TomorrowScreen(
+                navHostController = navHostController,
+                screenKey = screenKey,
+                weatherViewModel = weatherViewModel
+            )
         }
         composable("forecast_screen") {
             ForecastScreen(
-                modifier = Modifier,
                 navHostController = navHostController,
+                screenKey = screenKey,
+                weatherViewModel = weatherViewModel
             )
         }
         composable("saved_locations_screen") {
             SavedLocationsScreen(
-                modifier = Modifier,
                 navHostController = navHostController,
+                screenKey = screenKey,
+                weatherViewModel = weatherViewModel
             )
         }
-        composable("autocomplete_location_screen"){
+        composable("autocomplete_location_screen") {
             AutocompleteLocationScreen(
-                modifier = Modifier,
                 navHostController = navHostController,
+                screenKey = screenKey,
+                weatherViewModel = weatherViewModel
             )
         }
     }

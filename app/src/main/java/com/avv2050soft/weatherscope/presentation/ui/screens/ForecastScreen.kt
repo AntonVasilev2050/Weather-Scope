@@ -13,11 +13,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -30,7 +33,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.avv2050soft.weatherscope.domain.models.forecast.Forecastday
 import com.avv2050soft.weatherscope.domain.models.forecast.Hour
@@ -43,15 +45,22 @@ import kotlin.math.roundToInt
 
 @Composable
 fun ForecastScreen(
-    modifier: Modifier = Modifier,
     navHostController: NavHostController,
+    screenKey: String,
+    weatherViewModel: WeatherViewModel
 ) {
-    val weatherViewModel = hiltViewModel<WeatherViewModel>()
     weatherViewModel.getLocationFromPreferences()
     val location by remember { weatherViewModel.locationStateFlow }
     weatherViewModel.loadWeather(location)
     val weather by remember { weatherViewModel.weatherStateFlow }
     val forecastDayList: List<Forecastday> = weather?.forecast?.forecastday ?: emptyList()
+    val lazyListState = weatherViewModel.scrollStates.getOrPut(screenKey) { LazyListState() }
+
+    DisposableEffect(lazyListState) {
+        onDispose {
+            weatherViewModel.scrollStates[screenKey] = lazyListState
+        }
+    }
     Column {
         Text(
             modifier = Modifier
@@ -66,7 +75,8 @@ fun ForecastScreen(
         LazyColumn(
             modifier = Modifier
                 .fillMaxHeight()
-                .padding(top = 8.dp, bottom = 70.dp)
+                .padding(top = 8.dp, bottom = 70.dp),
+            state = lazyListState
         ) {
             items(items = forecastDayList) { forecastDay ->
                 var isExpanded by rememberSaveable { mutableStateOf(false) }
@@ -103,7 +113,7 @@ fun BasicForecast(forecastDay: Forecastday) {
         ) {
             Column {
                 Text(
-                    text = forecastDay.dateEpoch.formattedDate("EEEE, dd MMM", "" ),
+                    text = forecastDay.dateEpoch.formattedDate("EEEE, dd MMM", ""),
                     fontWeight = FontWeight.SemiBold
                 )
                 Text(text = forecastDay.day.condition.text)
@@ -188,13 +198,15 @@ fun DetailsForecast(forecastDay: Forecastday, isExpanded: Boolean) {
 @Composable
 fun WeatherDayHourly(forecastDayHour: List<Hour>, isExpanded: Boolean) {
     val tempFontSize = 16.sp
+    val lazyListState = rememberLazyListState()
     if (isExpanded) {
         Column {
             Spacer(modifier = Modifier.height(8.dp))
             Text(text = "Weather hourly:", color = Color.Gray)
-            LazyRow (
-                modifier = Modifier.background(LightGreyTransparent)
-            ){
+            LazyRow(
+                modifier = Modifier.background(LightGreyTransparent),
+                state = lazyListState
+            ) {
                 items(items = forecastDayHour) {
                     Column(
                         verticalArrangement = Arrangement.Center,

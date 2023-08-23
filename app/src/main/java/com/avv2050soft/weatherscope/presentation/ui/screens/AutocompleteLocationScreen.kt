@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.twotone.ArrowBack
@@ -43,7 +44,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.avv2050soft.weatherscope.presentation.navigation.SavedLocations
 import com.avv2050soft.weatherscope.presentation.utils.navigateSingleTopTo
@@ -51,23 +51,30 @@ import com.avv2050soft.weatherscope.presentation.utils.navigateSingleTopTo
 @ExperimentalComposeUiApi
 @Composable
 fun AutocompleteLocationScreen(
-    modifier: Modifier,
     navHostController: NavHostController,
+    screenKey: String,
+    weatherViewModel: WeatherViewModel
 ) {
-    val weatherViewModel = hiltViewModel<WeatherViewModel>()
     val autocomplete by remember { weatherViewModel.autocompleteStateFlow }
+    val lazyListState = weatherViewModel.scrollStates.getOrPut(screenKey) { LazyListState() }
 
+    DisposableEffect(lazyListState) {
+        onDispose {
+            weatherViewModel.scrollStates[screenKey] = lazyListState
+        }
+    }
     Column(
         modifier = Modifier
             .padding(all = 8.dp)
             .fillMaxWidth(),
     ) {
-        FindLocationEditTextAutocomplete(navHostController)
+        FindLocationEditTextAutocomplete(navHostController, weatherViewModel)
         Text(text = "Autocomplete")
         LazyColumn(
             modifier = Modifier
                 .fillMaxHeight()
-                .padding(top = 8.dp, bottom = 350.dp)
+                .padding(top = 8.dp, bottom = 350.dp),
+            state = lazyListState
         ) {
             items(items = autocomplete) {
                 Row(
@@ -134,9 +141,9 @@ fun AutocompleteLocationScreen(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FindLocationEditTextAutocomplete(
-    navHostController: NavHostController
+    navHostController: NavHostController,
+    weatherViewModel: WeatherViewModel
 ) {
-    val weatherViewModel = hiltViewModel<WeatherViewModel>()
     var text by rememberSaveable { mutableStateOf(weatherViewModel.editTextValue) }
     val focusRequester = remember { FocusRequester() }
     weatherViewModel.loadAutocomplete(text)

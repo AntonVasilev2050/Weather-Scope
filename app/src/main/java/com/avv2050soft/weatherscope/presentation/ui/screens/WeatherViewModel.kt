@@ -1,6 +1,8 @@
 package com.avv2050soft.weatherscope.presentation.ui.screens
 
 import android.util.Log
+import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -56,6 +58,8 @@ class WeatherViewModel @Inject constructor(
     fun updateEditTextValue(input: String) {
         editTextValue = input
     }
+
+    val scrollStates = mutableMapOf<String, LazyListState>()
 
     fun loadAutocomplete(location: String) {
         viewModelScope.launch {
