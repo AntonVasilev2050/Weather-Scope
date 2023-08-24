@@ -1,7 +1,7 @@
 package com.avv2050soft.weatherscope.data.network.api
 
+import com.avv2050soft.weatherscope.data.network.dto.WeatherDto
 import com.avv2050soft.weatherscope.domain.models.autocomplete.Autocomplete
-import com.avv2050soft.weatherscope.domain.models.forecast.Weather
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -21,7 +21,7 @@ interface WeatherApi {
         @Query("aqi") aqi: String = "yes", //Get air quality data
         @Query("alerts") alerts: String = "yes", // Get weather alert data
         @Query("lang") language: String = "ru"
-    ): Weather
+    ): WeatherDto
 
     @GET("search.json")
     suspend fun search(
