@@ -15,8 +15,8 @@ class DatabaseRepositoryImpl @Inject constructor(
     private val db = WeatherDatabase.getInstance(context)
 
     override suspend fun insertInDb(autocompleteItem: AutocompleteItem) {
-        val locationItemDto = mapper.mapAutocompleteItemToLocationItemDto(autocompleteItem)
-        db.locationsDao().insert(locationItemDto)
+        val locationItemDb = mapper.mapAutocompleteItemToLocationItemDb(autocompleteItem)
+        db.locationsDao().insert(locationItemDb)
     }
 
     override suspend fun getAllLocationItemsFromDb(): List<AutocompleteItem> {

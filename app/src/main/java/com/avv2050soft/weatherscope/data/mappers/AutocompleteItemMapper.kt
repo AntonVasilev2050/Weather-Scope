@@ -4,7 +4,7 @@ import com.avv2050soft.weatherscope.data.local.db_model.LocationItemDb
 import com.avv2050soft.weatherscope.domain.models.autocomplete.AutocompleteItem
 
 class AutocompleteItemMapper {
-    fun mapAutocompleteItemToLocationItemDto(autocompleteItem: AutocompleteItem) = LocationItemDb(
+    fun mapAutocompleteItemToLocationItemDb(autocompleteItem: AutocompleteItem) = LocationItemDb(
         country = autocompleteItem.country,
         id = autocompleteItem.id,
         lat = autocompleteItem.lat,

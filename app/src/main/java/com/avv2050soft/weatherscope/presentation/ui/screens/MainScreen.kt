@@ -24,6 +24,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -35,6 +36,9 @@ import com.avv2050soft.weatherscope.presentation.navigation.TodayScreen
 import com.avv2050soft.weatherscope.presentation.navigation.WeatherScopeNavHost
 import com.avv2050soft.weatherscope.presentation.utils.getActivity
 import com.avv2050soft.weatherscope.presentation.utils.navigateSingleTopTo
+import com.google.accompanist.swiperefresh.SwipeRefresh
+import com.google.accompanist.swiperefresh.SwipeRefreshIndicator
+import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -43,13 +47,30 @@ fun MainScreen(
     navController: NavHostController,
     weatherViewModel: WeatherViewModel
 ) {
+    val location by remember { weatherViewModel.locationStateFlow }
     Scaffold(
         bottomBar = { BottomNavigation(navController = navController) }
     ) {
-        WeatherScopeNavHost(
-            navHostController = navController,
-            weatherViewModel
-        )
+
+        SwipeRefresh(state = rememberSwipeRefreshState(isRefreshing = false),
+            onRefresh = {
+                weatherViewModel.getLocationFromPreferences()
+                weatherViewModel.loadWeather(location)
+            },
+            indicator = { state, refreshTrigger ->
+                SwipeRefreshIndicator(
+                    state = state,
+                    refreshTriggerDistance = refreshTrigger,
+                    scale = true,
+                    backgroundColor = Color.White
+                )
+            }
+        ) {
+            WeatherScopeNavHost(
+                navHostController = navController,
+                weatherViewModel
+            )
+        }
     }
 }
 

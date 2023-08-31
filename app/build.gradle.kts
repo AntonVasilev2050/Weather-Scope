@@ -100,6 +100,8 @@ dependencies {
     kapt ("com.google.dagger:hilt-android-compiler:2.46")
 
     implementation ("com.google.android.gms:play-services-location:21.0.1")
+
+    implementation("com.google.accompanist:accompanist-swiperefresh:0.19.0")
 }
 
 // Allow references to generated code

@@ -2,7 +2,6 @@ package com.avv2050soft.weatherscope.data.repository
 
 import com.avv2050soft.weatherscope.data.mappers.WeatherMapper
 import com.avv2050soft.weatherscope.data.network.api.WeatherApi
-import com.avv2050soft.weatherscope.data.network.dto.WeatherDto
 import com.avv2050soft.weatherscope.domain.models.autocomplete.AutocompleteItem
 import com.avv2050soft.weatherscope.domain.models.forecast.Weather
 import com.avv2050soft.weatherscope.domain.repository.WeatherRepository
@@ -18,7 +17,7 @@ class WeatherRepositoryImpl @Inject constructor(
         alerts: String,
         lang: String
     ): Weather {
-        val weather = mapper.mapWeatherDtoToWeather(
+        return mapper.mapWeatherDtoToWeather(
             WeatherApi.create().getWeather(
                 location = location,
                 days = days,
@@ -27,7 +26,6 @@ class WeatherRepositoryImpl @Inject constructor(
                 language = lang
             )
         )
-        return weather
     }
 
     override suspend fun search(location: String): List<AutocompleteItem> {

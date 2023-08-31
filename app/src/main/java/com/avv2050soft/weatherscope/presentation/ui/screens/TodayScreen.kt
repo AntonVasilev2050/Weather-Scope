@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
@@ -50,50 +51,55 @@ fun TodayScreen(
     weatherViewModel.loadWeather(location)
     val weather by remember { weatherViewModel.weatherStateFlow }
     val hourlyForecast = weather?.forecast?.forecastday?.get(0)?.hour
-    Surface(
-        color = colorScheme.primary
-    ) {
-        Column(
-            modifier = Modifier
-                .padding(start = 16.dp, end = 16.dp, top = 4.dp, bottom = 90.dp)
-                .fillMaxSize(),
-        ) {
-            if (weather != null) {
-                weather?.let { weather ->
-                    FindLocationRow(
-                        navHostController = navHostController,
-                        weatherViewModel = weatherViewModel
-                    )
-                    Spacer(modifier = Modifier.height(16.dp))
-                    WeatherDateTime(weather)
-                    Spacer(modifier = Modifier.height(16.dp))
-                    TemperatureDayNight(weather)
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(start = 8.dp, end = 8.dp),
-                    ) {
-                        Temperature(weather = weather)
-                        Spacer(modifier = Modifier.width(32.dp))
-                        WeatherConditions(weather = weather)
+    LazyColumn {
+        item {
+            Surface(
+                color = colorScheme.primary
+            ) {
+                Column(
+                    modifier = Modifier
+                        .padding(start = 16.dp, end = 16.dp, top = 4.dp, bottom = 90.dp)
+                        .fillMaxSize(),
+                ) {
+                    if (weather != null) {
+                        weather?.let { weather ->
+                            FindLocationRow(
+                                navHostController = navHostController,
+                                weatherViewModel = weatherViewModel
+                            )
+                            Spacer(modifier = Modifier.height(16.dp))
+                            WeatherDateTime(weather)
+                            Spacer(modifier = Modifier.height(16.dp))
+                            TemperatureDayNight(weather)
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(start = 8.dp, end = 8.dp),
+                            ) {
+                                Temperature(weather = weather)
+                                Spacer(modifier = Modifier.width(32.dp))
+                                WeatherConditions(weather = weather)
+                            }
+                        }
+                        Spacer(modifier = Modifier.height(64.dp))
+                        Text(text = "Weather hourly:")
+                        Spacer(modifier = Modifier.height(4.dp))
+                        hourlyForecast?.let { WeatherHourly(it, screenKey, weatherViewModel) }
+                    } else {
+                        Text(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .wrapContentHeight(),
+                            text = "Data is loading...",
+                            textAlign = TextAlign.Center
+                        )
                     }
                 }
-                Spacer(modifier = Modifier.height(64.dp))
-                Text(text = "Weather hourly:")
-                Spacer(modifier = Modifier.height(4.dp))
-                hourlyForecast?.let { WeatherHourly(it, screenKey, weatherViewModel) }
-            } else {
-                Text(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .wrapContentHeight(),
-                    text = "Data is loading...",
-                    textAlign = TextAlign.Center
-                )
             }
         }
     }
 }
+
 
 @Composable
 private fun WeatherDateTime(weather: Weather) {
