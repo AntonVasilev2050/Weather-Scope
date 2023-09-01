@@ -16,9 +16,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme.colorScheme
@@ -40,6 +37,7 @@ import androidx.navigation.NavHostController
 import com.avv2050soft.weatherscope.R
 import com.avv2050soft.weatherscope.domain.models.forecast.Hour
 import com.avv2050soft.weatherscope.domain.models.forecast.Weather
+import com.avv2050soft.weatherscope.presentation.ui.theme.LightGreyTransparent
 import com.avv2050soft.weatherscope.presentation.utils.CoilImage
 import com.avv2050soft.weatherscope.presentation.utils.formattedDate
 import kotlin.math.roundToInt
@@ -67,7 +65,7 @@ fun TodayScreen(
                 ) {
                     Column(
                         modifier = Modifier
-                            .padding(start = 16.dp, end = 16.dp, top = 4.dp, bottom = 110.dp)
+                            .padding(start = 16.dp, end = 16.dp, top = 4.dp, bottom = 30.dp)
                             .fillMaxSize(),
                     ) {
                         weather?.let { weather ->
@@ -88,16 +86,17 @@ fun TodayScreen(
                                 Spacer(modifier = Modifier.width(32.dp))
                                 WeatherConditions(weather = weather)
                             }
-                        }
-                        Spacer(modifier = Modifier.height(64.dp))
-                        Text(text = "Weather hourly:")
-                        Spacer(modifier = Modifier.height(4.dp))
-                        hourlyForecast?.let { WeatherHourly(it, screenKey, weatherViewModel) }
-                    }
+                            Spacer(modifier = Modifier.height(32.dp))
 
+                            hourlyForecast?.let { WeatherHourly(it, screenKey, weatherViewModel) }
+                            Spacer(modifier = Modifier.height(32.dp))
+                            WeatherNow(weather = weather)
+                            Spacer(modifier = Modifier.height(32.dp))
+                            SunriseSunset(weather = weather)
+                        }
+                    }
                 }
             }
-
         }
     } else {
         Text(
@@ -169,7 +168,7 @@ private fun Temperature(weather: Weather) {
 }
 
 @Composable
-fun WeatherConditions(weather: Weather) {
+private fun WeatherConditions(weather: Weather) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -200,35 +199,129 @@ fun WeatherHourly(
             weatherViewModel.scrollStates[screenKey] = lazyListState
         }
     }
-    LazyRow(
-        state = lazyListState
-    ) {
-        items(items = hourlyForecast) { hourForecast ->
-            Column(
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Row {
-                    Text(hourForecast.tempC.roundToInt().toString(), fontSize = tempFontSize)
-                    Text(text = "°", fontSize = tempFontSize)
+    Column {
+        Text(text = "Weather hourly:")
+        Spacer(modifier = Modifier.height(4.dp))
+        LazyRow(
+            state = lazyListState
+        ) {
+            items(items = hourlyForecast) { hourForecast ->
+                Column(
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Row {
+                        Text(hourForecast.tempC.roundToInt().toString(), fontSize = tempFontSize)
+                        Text(text = "°", fontSize = tempFontSize)
+                    }
+                    CoilImage(
+                        data = "https:${hourForecast.condition.icon}",
+                        Modifier.size(50.dp),
+                        contentDescription = "Picture of the weather conditions",
+                        alignment = Alignment.BottomCenter
+                    )
+                    Divider(modifier = Modifier.width(50.dp), color = Color.LightGray, thickness = 1.dp)
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Text(
+                        text = hourForecast.time.takeLast(5),
+                        fontWeight = FontWeight.SemiBold,
+                        fontSize = 14.sp,
+                        color = LightGreyTransparent
+                    )
                 }
-                CoilImage(
-                    data = "https:${hourForecast.condition.icon}",
-                    Modifier.size(50.dp),
-                    contentDescription = "Picture of the weather conditions",
-                    alignment = Alignment.BottomCenter
-                )
-                Divider(modifier = Modifier.width(50.dp), color = Color.LightGray, thickness = 1.dp)
-                Spacer(modifier = Modifier.height(8.dp))
-                Text(
-                    text = hourForecast.time.takeLast(5),
-                    fontWeight = FontWeight.SemiBold,
-                    fontSize = 14.sp
-                )
             }
         }
     }
 }
 
+@Composable
+private fun WeatherNow(weather: Weather) {
+    Column {
+        Text(text = "Now:")
+        Spacer(modifier = Modifier.height(4.dp))
+        Row(
+            modifier = Modifier
+                .fillMaxWidth(),
+            horizontalArrangement = Arrangement.Start
+        ) {
+            Text(text = "Wind",
+                modifier = Modifier.fillMaxWidth(Fraction04),
+                color = LightGreyTransparent)
+            Text(text = "${weather.current.windKph.roundToInt()} kph ${weather.current.windDir}")
+        }
+        Row(
+            modifier = Modifier
+                .fillMaxWidth(),
+            horizontalArrangement = Arrangement.Start
+        ) {
+            Text(text = "Humidity",
+                modifier = Modifier.fillMaxWidth(Fraction04),
+                color = LightGreyTransparent)
+            Text(text = "${weather.current.humidity}%")
+        }
+        Row(
+            modifier = Modifier
+                .fillMaxWidth(),
+            horizontalArrangement = Arrangement.Start
+        ) {
+            Text(text = "Pressure",
+                modifier = Modifier.fillMaxWidth(Fraction04),
+                color = LightGreyTransparent)
+            Text(text = "${weather.current.pressureMb.roundToInt()} mBar")
+        }
+        Row(
+            modifier = Modifier
+                .fillMaxWidth(),
+            horizontalArrangement = Arrangement.Start
+        ) {
+            Text(text = "UV index",
+                modifier = Modifier.fillMaxWidth(Fraction04),
+                color = LightGreyTransparent)
+            Text(text = "${weather.current.uv.roundToInt()}")
+        }
+        Row(
+            modifier = Modifier
+                .fillMaxWidth(),
+            horizontalArrangement = Arrangement.Start
+        ) {
+            Text(text = "Visibility",
+                modifier = Modifier.fillMaxWidth(Fraction04),
+                color = LightGreyTransparent)
+            Text(text = "${weather.current.visKm.roundToInt()} km")
+        }
+    }
+}
+
+@Composable
+private fun SunriseSunset(weather: Weather){
+    Column {
+        Text(text = "Sunrise and Sunset")
+        Spacer(modifier = Modifier.height(4.dp))
+        Row (
+            modifier = Modifier
+                .fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceAround
+        ){
+            Column (
+                horizontalAlignment = Alignment.CenterHorizontally
+            ){
+                Text(text = "Sunrise", color = LightGreyTransparent)
+                Text(
+                    text = weather.forecast.forecastday[0].astro.sunrise,
+                    fontSize = 28.sp
+                )
+            }
+            Column (
+                horizontalAlignment = Alignment.CenterHorizontally
+            ){
+                Text(text = "Sunset", color = LightGreyTransparent)
+                Text(text = weather.forecast.forecastday[0].astro.sunset,
+                    fontSize = 28.sp)
+            }
+        }
+    }
+}
+
+private const val Fraction04 = 0.4f
 
 
