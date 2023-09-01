@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -15,6 +16,9 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme.colorScheme
@@ -51,17 +55,21 @@ fun TodayScreen(
     weatherViewModel.loadWeather(location)
     val weather by remember { weatherViewModel.weatherStateFlow }
     val hourlyForecast = weather?.forecast?.forecastday?.get(0)?.hour
-    LazyColumn {
-        item {
-            Surface(
-                color = colorScheme.primary
-            ) {
-                Column(
-                    modifier = Modifier
-                        .padding(start = 16.dp, end = 16.dp, top = 4.dp, bottom = 90.dp)
-                        .fillMaxSize(),
+    if (weather != null) {
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxHeight()
+                .padding(top = 0.dp, bottom = 70.dp),
+        ) {
+            item {
+                Surface(
+                    color = colorScheme.primary
                 ) {
-                    if (weather != null) {
+                    Column(
+                        modifier = Modifier
+                            .padding(start = 16.dp, end = 16.dp, top = 4.dp, bottom = 110.dp)
+                            .fillMaxSize(),
+                    ) {
                         weather?.let { weather ->
                             FindLocationRow(
                                 navHostController = navHostController,
@@ -85,21 +93,22 @@ fun TodayScreen(
                         Text(text = "Weather hourly:")
                         Spacer(modifier = Modifier.height(4.dp))
                         hourlyForecast?.let { WeatherHourly(it, screenKey, weatherViewModel) }
-                    } else {
-                        Text(
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .wrapContentHeight(),
-                            text = "Data is loading...",
-                            textAlign = TextAlign.Center
-                        )
                     }
+
                 }
             }
+
         }
+    } else {
+        Text(
+            modifier = Modifier
+                .fillMaxSize()
+                .wrapContentHeight(),
+            text = "Data is loading...",
+            textAlign = TextAlign.Center
+        )
     }
 }
-
 
 @Composable
 private fun WeatherDateTime(weather: Weather) {
@@ -176,7 +185,6 @@ fun WeatherConditions(weather: Weather) {
             textAlign = TextAlign.Center
         )
     }
-
 }
 
 @Composable
@@ -187,7 +195,6 @@ fun WeatherHourly(
 ) {
     val tempFontSize = 16.sp
     val lazyListState = weatherViewModel.scrollStates.getOrPut(screenKey) { LazyListState() }
-
     DisposableEffect(lazyListState) {
         onDispose {
             weatherViewModel.scrollStates[screenKey] = lazyListState

@@ -51,8 +51,8 @@ fun MainScreen(
     Scaffold(
         bottomBar = { BottomNavigation(navController = navController) }
     ) {
-
-        SwipeRefresh(state = rememberSwipeRefreshState(isRefreshing = false),
+        SwipeRefresh(
+            state = rememberSwipeRefreshState(isRefreshing = false),
             onRefresh = {
                 weatherViewModel.getLocationFromPreferences()
                 weatherViewModel.loadWeather(location)
@@ -66,10 +66,7 @@ fun MainScreen(
                 )
             }
         ) {
-            WeatherScopeNavHost(
-                navHostController = navController,
-                weatherViewModel
-            )
+            WeatherScopeNavHost(navHostController = navController, weatherViewModel)
         }
     }
 }
