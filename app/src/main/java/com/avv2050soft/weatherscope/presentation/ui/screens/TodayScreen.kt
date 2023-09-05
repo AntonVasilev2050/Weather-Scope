@@ -1,5 +1,6 @@
 package com.avv2050soft.weatherscope.presentation.ui.screens
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -16,6 +17,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme.colorScheme
@@ -54,26 +56,25 @@ fun TodayScreen(
     val weather by remember { weatherViewModel.weatherStateFlow }
     val hourlyForecast = weather?.forecast?.forecastday?.get(0)?.hour
     if (weather != null) {
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxHeight()
-                .padding(top = 0.dp, bottom = 70.dp),
+        Surface(
+            color = colorScheme.primary
         ) {
-            item {
-                Surface(
-                    color = colorScheme.primary
+            Column(
+                modifier = Modifier
+                    .padding(start = 16.dp, end = 16.dp, top = 4.dp, bottom = 30.dp)
+                    .fillMaxSize(),
+            ) {
+                FindLocationRow(
+                    navHostController = navHostController,
+                    weatherViewModel = weatherViewModel
+                )
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxHeight()
+                        .padding(top = 0.dp, bottom = 55.dp),
                 ) {
-                    Column(
-                        modifier = Modifier
-                            .padding(start = 16.dp, end = 16.dp, top = 4.dp, bottom = 30.dp)
-                            .fillMaxSize(),
-                    ) {
+                    item {
                         weather?.let { weather ->
-                            FindLocationRow(
-                                navHostController = navHostController,
-                                weatherViewModel = weatherViewModel
-                            )
-                            Spacer(modifier = Modifier.height(16.dp))
                             WeatherDateTime(weather)
                             Spacer(modifier = Modifier.height(16.dp))
                             TemperatureDayNight(weather)
@@ -88,7 +89,13 @@ fun TodayScreen(
                             }
                             Spacer(modifier = Modifier.height(32.dp))
 
-                            hourlyForecast?.let { WeatherHourly(it, screenKey, weatherViewModel) }
+                            hourlyForecast?.let {
+                                WeatherHourly(
+                                    it,
+                                    screenKey,
+                                    weatherViewModel
+                                )
+                            }
                             Spacer(modifier = Modifier.height(32.dp))
                             WeatherNow(weather = weather)
                             Spacer(modifier = Modifier.height(32.dp))
@@ -200,41 +207,52 @@ fun WeatherHourly(
         }
     }
     Column {
+        Spacer(modifier = Modifier.height(8.dp))
         Text(text = "Weather hourly:")
         Spacer(modifier = Modifier.height(4.dp))
-        LazyRow(
-            state = lazyListState
+        Surface(
+            shape = RoundedCornerShape(8.dp),
+            tonalElevation = 20.dp
         ) {
-            items(items = hourlyForecast) { hourForecast ->
-                Column(
-                    verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Row {
-                        Text(hourForecast.tempC.roundToInt().toString(), fontSize = tempFontSize)
-                        Text(text = "°", fontSize = tempFontSize)
+            LazyRow(
+                state = lazyListState
+            ) {
+                items(items = hourlyForecast) { hourForecast ->
+                    Column(
+                        verticalArrangement = Arrangement.Center,
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Row {
+                            Text(
+                                hourForecast.tempC.roundToInt().toString(),
+                                fontSize = tempFontSize,
+                                color = Color.Black
+                            )
+                            Text(text = "°", fontSize = tempFontSize, color = Color.Black)
+                        }
+                        CoilImage(
+                            data = "https:${hourForecast.condition.icon}",
+                            Modifier.size(50.dp),
+                            contentDescription = "Picture of the weather conditions",
+                            alignment = Alignment.BottomCenter
+                        )
+                        Divider(
+                            modifier = Modifier.width(50.dp),
+                            color = Color.LightGray,
+                            thickness = 1.dp
+                        )
+                        Spacer(modifier = Modifier.height(8.dp))
+                        Text(
+                            text = hourForecast.time.takeLast(5),
+                            fontWeight = FontWeight.SemiBold,
+                            fontSize = 14.sp,
+                            color = Color.Gray
+                        )
                     }
-                    CoilImage(
-                        data = "https:${hourForecast.condition.icon}",
-                        Modifier.size(50.dp),
-                        contentDescription = "Picture of the weather conditions",
-                        alignment = Alignment.BottomCenter
-                    )
-                    Divider(
-                        modifier = Modifier.width(50.dp),
-                        color = Color.LightGray,
-                        thickness = 1.dp
-                    )
-                    Spacer(modifier = Modifier.height(8.dp))
-                    Text(
-                        text = hourForecast.time.takeLast(5),
-                        fontWeight = FontWeight.SemiBold,
-                        fontSize = 14.sp,
-                        color = LightGreyTransparent
-                    )
                 }
             }
         }
+
     }
 }
 

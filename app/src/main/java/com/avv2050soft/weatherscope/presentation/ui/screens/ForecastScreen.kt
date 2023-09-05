@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -17,7 +18,11 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Divider
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.MaterialTheme.colorScheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
@@ -61,39 +66,41 @@ fun ForecastScreen(
             weatherViewModel.scrollStates[screenKey] = lazyListState
         }
     }
-    Column {
-        Text(
+    Surface(
+        color = colorScheme.primary
+    ) {
+        Column(
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 4.dp)
-                .wrapContentHeight()
-                .clickable { navHostController.navigateSingleTopTo(SavedLocations.route) },
-            text = "Weather forecast for \n ${weather?.location?.name}, ${weather?.location?.country}",
-            textAlign = TextAlign.Center,
-            fontWeight = FontWeight.Bold
-        )
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxHeight()
-                .padding(top = 8.dp, bottom = 70.dp),
-            state = lazyListState
+                .padding(start = 16.dp, end = 16.dp, top = 4.dp, bottom = 30.dp)
+                .fillMaxSize(),
         ) {
-            items(items = forecastDayList) { forecastDay ->
-                var isExpanded by rememberSaveable { mutableStateOf(false) }
-                Column(
-                    modifier = Modifier
-                        .clickable { isExpanded = !isExpanded }
-                        .padding(start = 16.dp, end = 16.dp)
-                ) {
-                    Divider(
-                        modifier = Modifier.fillMaxWidth(),
-                        color = Color.LightGray,
-                        thickness = 3.dp
-                    )
-                    BasicForecast(forecastDay)
-                    DetailsForecast(forecastDay, isExpanded)
-                    WeatherDayHourly(forecastDayHour = forecastDay.hour, isExpanded)
-                    Spacer(modifier = Height)
+            FindLocationRow(
+                navHostController = navHostController,
+                weatherViewModel = weatherViewModel
+            )
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .padding(top = 8.dp, bottom = 55.dp),
+                state = lazyListState
+            ) {
+                items(items = forecastDayList) { forecastDay ->
+                    var isExpanded by rememberSaveable { mutableStateOf(false) }
+                    Column(
+                        modifier = Modifier
+                            .clickable { isExpanded = !isExpanded }
+                            .padding(start = 0.dp, end = 0.dp)
+                    ) {
+                        Divider(
+                            modifier = Modifier.fillMaxWidth(),
+                            color = Color.LightGray,
+                            thickness = 3.dp
+                        )
+                        BasicForecast(forecastDay)
+                        DetailsForecast(forecastDay, isExpanded)
+                        WeatherDayHourly(forecastDayHour = forecastDay.hour, isExpanded)
+                        Spacer(modifier = Height)
+                    }
                 }
             }
         }
@@ -130,7 +137,10 @@ fun BasicForecast(forecastDay: Forecastday) {
             )
             Column {
                 Text(text = "${forecastDay.day.maxtempC.roundToInt()}°")
-                Text(text = "${forecastDay.day.mintempC.roundToInt()}°", color = Color.Gray)
+                Text(
+                    text = "${forecastDay.day.mintempC.roundToInt()}°",
+                    color = LightGreyTransparent
+                )
             }
         }
     }
@@ -151,7 +161,7 @@ fun DetailsForecast(forecastDay: Forecastday, isExpanded: Boolean) {
                 Text(
                     text = "Wind",
                     modifier = Modifier.fillMaxWidth(Fraction04),
-                    color = Color.Gray
+                    color = LightGreyTransparent
                 )
                 Text(text = "${forecastDay.day.maxwindKph} km/hour")
             }
@@ -163,7 +173,7 @@ fun DetailsForecast(forecastDay: Forecastday, isExpanded: Boolean) {
                 Text(
                     text = "Humidity",
                     modifier = Modifier.fillMaxWidth(Fraction04),
-                    color = Color.Gray
+                    color = LightGreyTransparent
                 )
                 Text(text = "${forecastDay.day.avghumidity} %")
             }
@@ -175,7 +185,7 @@ fun DetailsForecast(forecastDay: Forecastday, isExpanded: Boolean) {
                 Text(
                     text = "UV index",
                     modifier = Modifier.fillMaxWidth(Fraction04),
-                    color = Color.Gray
+                    color = LightGreyTransparent
                 )
                 Text(text = "${forecastDay.day.uv}")
             }
@@ -187,7 +197,7 @@ fun DetailsForecast(forecastDay: Forecastday, isExpanded: Boolean) {
                 Text(
                     text = "Sunrise/Sunset",
                     modifier = Modifier.fillMaxWidth(Fraction04),
-                    color = Color.Gray
+                    color = LightGreyTransparent
                 )
                 Text(text = "${forecastDay.astro.sunrise} / ${forecastDay.astro.sunset}")
             }
@@ -202,30 +212,47 @@ fun WeatherDayHourly(forecastDayHour: List<Hour>, isExpanded: Boolean) {
     if (isExpanded) {
         Column {
             Spacer(modifier = Modifier.height(8.dp))
-            Text(text = "Weather hourly:", color = Color.Gray)
-            LazyRow(
-                modifier = Modifier.background(LightGreyTransparent),
-                state = lazyListState
+            Text(text = "Weather hourly:")
+            Spacer(modifier = Modifier.height(4.dp))
+            Surface(
+                shape = RoundedCornerShape(8.dp),
+                tonalElevation = 20.dp
             ) {
-                items(items = forecastDayHour) {
-                    Column(
-                        verticalArrangement = Arrangement.Center,
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        Row {
-                            Text(it.tempC.roundToInt().toString(), fontSize = tempFontSize)
-                            Text(text = "°", fontSize = tempFontSize)
+                LazyRow(
+                    modifier = Modifier.background(colorScheme.primary),
+                    state = lazyListState
+                ) {
+                    items(items = forecastDayHour) {
+                        Column(
+                            modifier = Modifier.background(Color.White),
+                            verticalArrangement = Arrangement.Center,
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Row {
+                                Text(
+                                    it.tempC.roundToInt().toString(),
+                                    fontSize = tempFontSize,
+                                    color = Color.Black
+                                )
+                                Text(text = "°", fontSize = tempFontSize, color = Color.Black)
+                            }
+                            CoilImage(
+                                data = "https:${it.condition.icon}",
+                                Modifier.size(50.dp),
+                                contentDescription = "Picture of the weather conditions",
+                                alignment = Alignment.BottomCenter
+                            )
+                            Text(
+                                text = it.time.takeLast(5),
+                                fontWeight = FontWeight.SemiBold,
+                                fontSize = 14.sp,
+                                color = Color.Gray
+                            )
                         }
-                        CoilImage(
-                            data = "https:${it.condition.icon}",
-                            Modifier.size(50.dp),
-                            contentDescription = "Picture of the weather conditions",
-                            alignment = Alignment.BottomCenter
-                        )
-                        Text(text = it.time.takeLast(5), color = Color.Black, fontSize = 14.sp)
                     }
                 }
             }
+
         }
     }
 }
