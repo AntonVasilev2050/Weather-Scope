@@ -47,26 +47,26 @@ fun TomorrowScreen(
     val weather by remember { weatherViewModel.weatherStateFlow }
     val hourlyForecast = weather?.forecast?.forecastday?.get(1)?.hour
     if (weather != null) {
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxHeight()
-                .padding(top = 0.dp, bottom = 70.dp),
+        Surface(
+            color = MaterialTheme.colorScheme.primary
         ) {
-            item {
-                Surface(
-                    color = MaterialTheme.colorScheme.primary
+            Column(
+                modifier = Modifier
+                    .padding(start = 16.dp, end = 16.dp, top = 4.dp, bottom = 30.dp)
+                    .fillMaxSize(),
+            ) {
+                FindLocationRow(
+                    navHostController = navHostController,
+                    weatherViewModel = weatherViewModel
+                )
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxHeight()
+                        .padding(top = 0.dp, bottom = 55.dp),
                 ) {
-                    Column(
-                        modifier = Modifier
-                            .padding(start = 16.dp, end = 16.dp, top = 4.dp, bottom = 30.dp)
-                            .fillMaxSize(),
-                    ) {
+                    item {
                         weather?.let { weather ->
-                            FindLocationRow(
-                                navHostController = navHostController,
-                                weatherViewModel = weatherViewModel
-                            )
-                            Spacer(modifier = Modifier.height(16.dp))
+
                             WeatherDateTime(weather)
                             Spacer(modifier = Modifier.height(16.dp))
                             TemperatureDayNightTomorrow(weather)
