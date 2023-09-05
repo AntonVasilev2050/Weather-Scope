@@ -220,7 +220,11 @@ fun WeatherHourly(
                         contentDescription = "Picture of the weather conditions",
                         alignment = Alignment.BottomCenter
                     )
-                    Divider(modifier = Modifier.width(50.dp), color = Color.LightGray, thickness = 1.dp)
+                    Divider(
+                        modifier = Modifier.width(50.dp),
+                        color = Color.LightGray,
+                        thickness = 1.dp
+                    )
                     Spacer(modifier = Modifier.height(8.dp))
                     Text(
                         text = hourForecast.time.takeLast(5),
@@ -244,9 +248,11 @@ private fun WeatherNow(weather: Weather) {
                 .fillMaxWidth(),
             horizontalArrangement = Arrangement.Start
         ) {
-            Text(text = "Wind",
+            Text(
+                text = "Wind",
                 modifier = Modifier.fillMaxWidth(Fraction04),
-                color = LightGreyTransparent)
+                color = LightGreyTransparent
+            )
             Text(text = "${weather.current.windKph.roundToInt()} kph ${weather.current.windDir}")
         }
         Row(
@@ -254,9 +260,11 @@ private fun WeatherNow(weather: Weather) {
                 .fillMaxWidth(),
             horizontalArrangement = Arrangement.Start
         ) {
-            Text(text = "Humidity",
+            Text(
+                text = "Humidity",
                 modifier = Modifier.fillMaxWidth(Fraction04),
-                color = LightGreyTransparent)
+                color = LightGreyTransparent
+            )
             Text(text = "${weather.current.humidity}%")
         }
         Row(
@@ -264,9 +272,11 @@ private fun WeatherNow(weather: Weather) {
                 .fillMaxWidth(),
             horizontalArrangement = Arrangement.Start
         ) {
-            Text(text = "Pressure",
+            Text(
+                text = "Pressure",
                 modifier = Modifier.fillMaxWidth(Fraction04),
-                color = LightGreyTransparent)
+                color = LightGreyTransparent
+            )
             Text(text = "${weather.current.pressureMb.roundToInt()} mBar")
         }
         Row(
@@ -274,9 +284,11 @@ private fun WeatherNow(weather: Weather) {
                 .fillMaxWidth(),
             horizontalArrangement = Arrangement.Start
         ) {
-            Text(text = "UV index",
+            Text(
+                text = "UV index",
                 modifier = Modifier.fillMaxWidth(Fraction04),
-                color = LightGreyTransparent)
+                color = LightGreyTransparent
+            )
             Text(text = "${weather.current.uv.roundToInt()}")
         }
         Row(
@@ -284,39 +296,43 @@ private fun WeatherNow(weather: Weather) {
                 .fillMaxWidth(),
             horizontalArrangement = Arrangement.Start
         ) {
-            Text(text = "Visibility",
+            Text(
+                text = "Visibility",
                 modifier = Modifier.fillMaxWidth(Fraction04),
-                color = LightGreyTransparent)
+                color = LightGreyTransparent
+            )
             Text(text = "${weather.current.visKm.roundToInt()} km")
         }
     }
 }
 
 @Composable
-private fun SunriseSunset(weather: Weather){
+private fun SunriseSunset(weather: Weather) {
     Column {
         Text(text = "Sunrise and Sunset")
         Spacer(modifier = Modifier.height(4.dp))
-        Row (
+        Row(
             modifier = Modifier
                 .fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceAround
-        ){
-            Column (
+        ) {
+            Column(
                 horizontalAlignment = Alignment.CenterHorizontally
-            ){
+            ) {
                 Text(text = "Sunrise", color = LightGreyTransparent)
                 Text(
                     text = weather.forecast.forecastday[0].astro.sunrise,
-                    fontSize = 28.sp
+                    fontSize = 28.sp, fontWeight = FontWeight.Thin
                 )
             }
-            Column (
+            Column(
                 horizontalAlignment = Alignment.CenterHorizontally
-            ){
+            ) {
                 Text(text = "Sunset", color = LightGreyTransparent)
-                Text(text = weather.forecast.forecastday[0].astro.sunset,
-                    fontSize = 28.sp)
+                Text(
+                    text = weather.forecast.forecastday[0].astro.sunset,
+                    fontSize = 28.sp, fontWeight = FontWeight.Thin
+                )
             }
         }
     }
