@@ -276,11 +276,11 @@ fun HourPrecipitation(
     val precipitationFontSize = 16.sp
     var precipitationChance = hourForecast.chanceOfRain.toString()
     var precipitationIcon = painterResource(id = R.drawable.water_drop_empty)
-    if (hourForecast.willItRain == 1) {
+    if (hourForecast.chanceOfRain > 0) {
         precipitationChance = hourForecast.chanceOfRain.toString()
         precipitationIcon = painterResource(id = R.drawable.drop)
     }
-    if (hourForecast.willItSnow == 1) {
+    if (hourForecast.chanceOfSnow > 0) {
         precipitationChance = hourForecast.chanceOfSnow.toString()
         precipitationIcon = painterResource(id = R.drawable.snowflake)
     }
