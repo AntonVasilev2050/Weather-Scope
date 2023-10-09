@@ -135,14 +135,14 @@ private fun WeatherDateTime(weather: Weather) {
 private fun TemperatureDayNight(weather: Weather) {
     Row {
         Icon(
-            painter = painterResource(id = R.drawable.baseline_light_mode_24),
+            painter = painterResource(id = R.drawable.icon_day),
             contentDescription = null
         )
         Text(text = "Day:", modifier = Modifier.padding(end = 4.dp))
         Text(text = weather.forecast.forecastday[0].day.maxtempC.roundToInt().toString())
         Text(text = "°", modifier = Modifier.padding(end = 24.dp))
         Icon(
-            painter = painterResource(id = R.drawable.baseline_mode_night_24),
+            painter = painterResource(id = R.drawable.icon_night),
             contentDescription = null
         )
         Text(text = "Night:", modifier = Modifier.padding(end = 4.dp))
@@ -226,7 +226,7 @@ fun WeatherHourly(
                         verticalArrangement = Arrangement.Center,
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        HourWeather(hourForecast)
+                        HourWeatherConditions(hourForecast)
                         Spacer(modifier = Modifier.height(8.dp))
                         HourPrecipitation(hourForecast)
                         Spacer(modifier = Modifier.height(8.dp))
@@ -249,7 +249,7 @@ fun WeatherHourly(
 }
 
 @Composable
-private fun HourWeather(
+fun HourWeatherConditions(
     hourForecast: Hour
 ) {
     val tempFontSize = 16.sp
@@ -294,7 +294,7 @@ fun HourPrecipitation(
     }
     Image(
         painter = precipitationIcon,
-        modifier = Modifier.size(30.dp),
+        modifier = Modifier.size(20.dp),
         contentDescription = ""
     )
     Row(

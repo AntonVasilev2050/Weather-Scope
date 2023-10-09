@@ -35,7 +35,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
@@ -226,7 +225,7 @@ fun WeatherDayHourly(forecastDayHour: List<Hour>, isExpanded: Boolean) {
                             verticalArrangement = Arrangement.Center,
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
-                            HourWeather(hourForecast, tempFontSize)
+                            HourWeatherConditions(hourForecast)
                             Spacer(modifier = Modifier.height(8.dp))
                             HourPrecipitation(hourForecast = hourForecast)
                             Spacer(modifier = Modifier.height(8.dp))
@@ -247,27 +246,6 @@ fun WeatherDayHourly(forecastDayHour: List<Hour>, isExpanded: Boolean) {
             }
         }
     }
-}
-
-@Composable
-private fun HourWeather(
-    hourForecast: Hour,
-    tempFontSize: TextUnit
-) {
-    Row {
-        Text(
-            hourForecast.tempC.roundToInt().toString(),
-            fontSize = tempFontSize,
-            color = Color.Black
-        )
-        Text(text = "°", fontSize = tempFontSize, color = Color.Black)
-    }
-    CoilImage(
-        data = "https:${hourForecast.condition.icon}",
-        Modifier.size(50.dp),
-        contentDescription = "Picture of the weather conditions",
-        alignment = Alignment.BottomCenter
-    )
 }
 
 private val Height = Modifier.height(16.dp)

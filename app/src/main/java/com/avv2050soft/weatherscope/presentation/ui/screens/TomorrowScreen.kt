@@ -115,14 +115,14 @@ private fun WeatherDateTime(weather: Weather) {
 private fun TemperatureDayNightTomorrow(weather: Weather) {
     Row {
         Icon(
-            painter = painterResource(id = R.drawable.baseline_light_mode_24),
+            painter = painterResource(id = R.drawable.icon_day),
             contentDescription = null
         )
         Text(text = "Day:", modifier = Modifier.padding(end = 4.dp))
         Text(text = weather.forecast.forecastday[1].day.maxtempC.roundToInt().toString())
         Text(text = "°", modifier = Modifier.padding(end = 24.dp))
         Icon(
-            painter = painterResource(id = R.drawable.baseline_mode_night_24),
+            painter = painterResource(id = R.drawable.icon_night),
             contentDescription = null
         )
         Text(text = "Night:", modifier = Modifier.padding(end = 4.dp))
