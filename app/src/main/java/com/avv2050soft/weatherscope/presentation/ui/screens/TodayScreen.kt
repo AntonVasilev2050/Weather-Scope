@@ -1,6 +1,7 @@
 package com.avv2050soft.weatherscope.presentation.ui.screens
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -217,6 +218,7 @@ fun WeatherHourly(
             tonalElevation = 20.dp
         ) {
             LazyRow(
+                modifier = Modifier.background(Color.White),
                 state = lazyListState
             ) {
                 items(items = hourlyForecast) { hourForecast ->
@@ -227,12 +229,12 @@ fun WeatherHourly(
                         HourWeather(hourForecast)
                         Spacer(modifier = Modifier.height(8.dp))
                         HourPrecipitation(hourForecast)
+                        Spacer(modifier = Modifier.height(8.dp))
                         Divider(
                             modifier = Modifier.width(70.dp),
                             color = Color.LightGray,
                             thickness = 1.dp
                         )
-                        Spacer(modifier = Modifier.height(8.dp))
                         Text(
                             text = hourForecast.time.takeLast(5),
                             fontWeight = FontWeight.SemiBold,
@@ -268,7 +270,7 @@ private fun HourWeather(
 }
 
 @Composable
-private fun HourPrecipitation(
+fun HourPrecipitation(
     hourForecast: Hour
 ) {
     val precipitationFontSize = 16.sp
@@ -386,8 +388,6 @@ private fun ForecastDay(weather: Weather) {
     Column {
         Text(text = "Total today:")
         Spacer(modifier = Modifier.height(4.dp))
-
-
         Row(
             modifier = Modifier
                 .fillMaxWidth(),
