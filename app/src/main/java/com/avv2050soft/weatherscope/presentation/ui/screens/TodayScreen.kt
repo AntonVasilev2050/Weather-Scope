@@ -1,6 +1,6 @@
 package com.avv2050soft.weatherscope.presentation.ui.screens
 
-import androidx.compose.foundation.background
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -98,6 +98,8 @@ fun TodayScreen(
                             }
                             Spacer(modifier = Modifier.height(32.dp))
                             WeatherNow(weather = weather)
+                            Spacer(modifier = Modifier.height(32.dp))
+                            ForecastDay(weather = weather)
                             Spacer(modifier = Modifier.height(32.dp))
                             SunriseSunset(weather = weather)
                         }
@@ -199,7 +201,7 @@ fun WeatherHourly(
     screenKey: String,
     weatherViewModel: WeatherViewModel
 ) {
-    val tempFontSize = 16.sp
+
     val lazyListState = weatherViewModel.scrollStates.getOrPut(screenKey) { LazyListState() }
     DisposableEffect(lazyListState) {
         onDispose {
@@ -222,22 +224,11 @@ fun WeatherHourly(
                         verticalArrangement = Arrangement.Center,
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        Row {
-                            Text(
-                                hourForecast.tempC.roundToInt().toString(),
-                                fontSize = tempFontSize,
-                                color = Color.Black
-                            )
-                            Text(text = "°", fontSize = tempFontSize, color = Color.Black)
-                        }
-                        CoilImage(
-                            data = "https:${hourForecast.condition.icon}",
-                            Modifier.size(50.dp),
-                            contentDescription = "Picture of the weather conditions",
-                            alignment = Alignment.BottomCenter
-                        )
+                        HourWeather(hourForecast)
+                        Spacer(modifier = Modifier.height(8.dp))
+                        HourPrecipitation(hourForecast)
                         Divider(
-                            modifier = Modifier.width(50.dp),
+                            modifier = Modifier.width(70.dp),
                             color = Color.LightGray,
                             thickness = 1.dp
                         )
@@ -245,14 +236,79 @@ fun WeatherHourly(
                         Text(
                             text = hourForecast.time.takeLast(5),
                             fontWeight = FontWeight.SemiBold,
-                            fontSize = 14.sp,
+                            fontSize = 16.sp,
                             color = Color.Gray
                         )
                     }
                 }
             }
         }
+    }
+}
 
+@Composable
+private fun HourWeather(
+    hourForecast: Hour
+) {
+    val tempFontSize = 16.sp
+    Row {
+        Text(
+            hourForecast.tempC.roundToInt().toString(),
+            fontSize = tempFontSize,
+            color = Color.Black
+        )
+        Text(text = "°", fontSize = tempFontSize, color = Color.Black)
+    }
+    CoilImage(
+        data = "https:${hourForecast.condition.icon}",
+        Modifier.size(50.dp),
+        contentDescription = "Picture of the weather conditions",
+        alignment = Alignment.BottomCenter
+    )
+}
+
+@Composable
+private fun HourPrecipitation(
+    hourForecast: Hour
+) {
+    val precipitationFontSize = 16.sp
+    var precipitationChance = hourForecast.chanceOfRain.toString()
+    var precipitationIcon = painterResource(id = R.drawable.water_drop_empty)
+    if (hourForecast.willItRain == 1) {
+        precipitationChance = hourForecast.chanceOfRain.toString()
+        precipitationIcon = painterResource(id = R.drawable.drop)
+    }
+    if (hourForecast.willItSnow == 1) {
+        precipitationChance = hourForecast.chanceOfSnow.toString()
+        precipitationIcon = painterResource(id = R.drawable.snowflake)
+    }
+    Row {
+        Text(
+            text = precipitationChance,
+            fontSize = precipitationFontSize,
+            color = Color.Black
+        )
+        Text(text = "%", fontSize = precipitationFontSize, color = Color.Black)
+    }
+    Image(
+        painter = precipitationIcon,
+        modifier = Modifier.size(30.dp),
+        contentDescription = ""
+    )
+    Row(
+        verticalAlignment = Alignment.Bottom
+    ) {
+        Text(
+            text = hourForecast.precipMm.toString(),
+            fontSize = precipitationFontSize,
+            color = Color.Black
+        )
+        Text(
+            text = "mm",
+            fontSize = 12.sp,
+            color = Color.Black,
+            textAlign = TextAlign.Start
+        )
     }
 }
 
@@ -320,6 +376,41 @@ private fun WeatherNow(weather: Weather) {
                 color = LightGreyTransparent
             )
             Text(text = "${weather.current.visKm.roundToInt()} km")
+        }
+
+    }
+}
+
+@Composable
+private fun ForecastDay(weather: Weather) {
+    Column {
+        Text(text = "Total today:")
+        Spacer(modifier = Modifier.height(4.dp))
+
+
+        Row(
+            modifier = Modifier
+                .fillMaxWidth(),
+            horizontalArrangement = Arrangement.Start
+        ) {
+            Text(
+                text = "Precipitation",
+                modifier = Modifier.fillMaxWidth(Fraction04),
+                color = LightGreyTransparent
+            )
+            Text(text = "${weather.forecast.forecastday[0].day.totalprecipMm} mm")
+        }
+        Row(
+            modifier = Modifier
+                .fillMaxWidth(),
+            horizontalArrangement = Arrangement.Start
+        ) {
+            Text(
+                text = "Snow",
+                modifier = Modifier.fillMaxWidth(Fraction04),
+                color = LightGreyTransparent
+            )
+            Text(text = "${weather.forecast.forecastday[0].day.totalsnowCm} cm")
         }
     }
 }
