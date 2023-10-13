@@ -18,7 +18,7 @@ import com.avv2050soft.weatherscope.presentation.ui.screens.WeatherViewModel
 @Composable
 fun WeatherScopeNavHost(
     navHostController: NavHostController,
-    weatherViewModel: WeatherViewModel,
+    weatherViewModel: WeatherViewModel
 ) {
     weatherViewModel.getLocationFromPreferences()
     val navBackStackEntry by navHostController.currentBackStackEntryAsState()

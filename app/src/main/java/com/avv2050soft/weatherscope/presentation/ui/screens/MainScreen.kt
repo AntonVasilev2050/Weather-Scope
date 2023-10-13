@@ -116,7 +116,7 @@ fun FindLocationRow(
         Icon(
             modifier = Modifier
                 .clickable {
-                    activity?.checkPermissions()
+                    activity?.locationUtils?.checkPermissions()
                     weatherViewModel.getLocationFromPreferences()
                     weatherViewModel.loadWeather(location)
                     navHostController.navigateSingleTopTo(route = TodayScreen.route)
