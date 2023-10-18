@@ -34,7 +34,7 @@ fun BottomNavigation(
         BottomItem.Forecast,
     )
     Surface(
-        shape = RoundedCornerShape(16.dp),
+        shape = RoundedCornerShape(16.dp, 16.dp, 0.dp, 0.dp),
         border = BorderStroke(1.dp, LightGrey)
     ) {
         NavigationBar(

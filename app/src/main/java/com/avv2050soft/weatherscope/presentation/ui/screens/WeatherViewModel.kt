@@ -34,8 +34,8 @@ class WeatherViewModel @Inject constructor(
     private val getAllLocationItemsFromDatabaseUseCase: GetAllLocationItemsFromDatabaseUseCase,
     private val insertInDatabaseUseCase: InsertInDatabaseUseCase,
     private val deleteLocationItemFromDatabaseByIdUseCase: DeleteLocationItemFromDatabaseByIdUseCase
-
 ) : ViewModel() {
+
     private var weather: Weather? = null
     var weatherStateFlow: MutableState<Weather?> = mutableStateOf(weather)
 
