@@ -11,7 +11,7 @@ import coil.request.ImageRequest
 import com.avv2050soft.weatherscope.R
 
 @Composable
-fun CoilImage(
+fun LoadImage(
     data: Any?,
     modifier: Modifier = Modifier,
     contentDescription: String? = null,

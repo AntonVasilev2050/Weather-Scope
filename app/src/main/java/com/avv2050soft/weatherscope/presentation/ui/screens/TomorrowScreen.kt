@@ -31,7 +31,7 @@ import androidx.navigation.NavHostController
 import com.avv2050soft.weatherscope.R
 import com.avv2050soft.weatherscope.domain.models.forecast.Weather
 import com.avv2050soft.weatherscope.presentation.ui.theme.LightGreyTransparent
-import com.avv2050soft.weatherscope.presentation.utils.CoilImage
+import com.avv2050soft.weatherscope.presentation.utils.LoadImage
 import com.avv2050soft.weatherscope.presentation.utils.formattedDate
 import kotlin.math.roundToInt
 
@@ -157,7 +157,7 @@ private fun WeatherConditionsTomorrow(weather: Weather) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        CoilImage(
+        LoadImage(
             data = "https:${weather.forecast.forecastday[1].day.condition.icon}",
             Modifier.size(120.dp),
             contentDescription = "Picture of the weather conditions",

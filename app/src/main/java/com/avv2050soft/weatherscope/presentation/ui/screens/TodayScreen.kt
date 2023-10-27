@@ -41,7 +41,7 @@ import com.avv2050soft.weatherscope.R
 import com.avv2050soft.weatherscope.domain.models.forecast.Hour
 import com.avv2050soft.weatherscope.domain.models.forecast.Weather
 import com.avv2050soft.weatherscope.presentation.ui.theme.LightGreyTransparent
-import com.avv2050soft.weatherscope.presentation.utils.CoilImage
+import com.avv2050soft.weatherscope.presentation.utils.LoadImage
 import com.avv2050soft.weatherscope.presentation.utils.formattedDate
 import kotlin.math.roundToInt
 
@@ -182,7 +182,7 @@ private fun WeatherConditions(weather: Weather) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        CoilImage(
+        LoadImage(
             data = "https:${weather.current.condition.icon}",
             Modifier.size(120.dp),
             contentDescription = "Picture of the weather conditions",
@@ -261,7 +261,7 @@ fun HourWeatherConditions(
         )
         Text(text = "°", fontSize = tempFontSize, color = Color.Black)
     }
-    CoilImage(
+    LoadImage(
         data = "https:${hourForecast.condition.icon}",
         Modifier.size(50.dp),
         contentDescription = "Picture of the weather conditions",
