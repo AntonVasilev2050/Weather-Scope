@@ -5,34 +5,34 @@ https://drive.google.com/file/d/18TNjzeotr0LzUnn_pldWwY9mZdINqxBb/view?usp=shari
 Скриншоты:
 
 
-![Screenshot_20231113](app/src/main/res/drawable/Screenshot_20231113.png)
+![Screenshot_20231113](app/src/main/res/drawable/screenshot_20231113.png)
 ---------------
 
-![Screenshot_20231113_2](app/src/main/res/drawable/Screenshot_20231113_2.png)
+![Screenshot_20231113_2](app/src/main/res/drawable/screenshot_20231113_2.png)
 
 ------------
 
-![Screenshot_20231113_3](app/src/main/res/drawable/Screenshot_20231113_3.png)
+![Screenshot_20231113_3](app/src/main/res/drawable/screenshot_20231113_3.png)
 
 ------------
 
-![Screenshot_20231113_4](app/src/main/res/drawable/Screenshot_20231113_4.png)
+![Screenshot_20231113_4](app/src/main/res/drawable/screenshot_20231113_4.png)
 
 ------------
 
-![Screenshot_20231113_5](app/src/main/res/drawable/Screenshot_20231113_5.png)
+![Screenshot_20231113_5](app/src/main/res/drawable/screenshot_20231113_5.png)
 
 ------------
 
-![Screenshot_20231113_6](app/src/main/res/drawable/Screenshot_20231113_6.png)
+![Screenshot_20231113_6](app/src/main/res/drawable/screenshot_20231113_6.png)
 
 -----------
 
-![Screenshot_20231113_7](app/src/main/res/drawable/Screenshot_20231113_7.png)
+![Screenshot_20231113_7](app/src/main/res/drawable/screenshot_20231113_7.png)
 
 --------------
 
-![Screenshot_20231113_8](app/src/main/res/drawable/Screenshot_20231113_8.png)
+![Screenshot_20231113_8](app/src/main/res/drawable/screenshot_20231113_8.png)
 
 ------------------
 
