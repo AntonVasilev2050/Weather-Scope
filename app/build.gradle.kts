@@ -88,7 +88,7 @@ dependencies {
     implementation ("com.github.bumptech.glide:glide:4.14.2")
     annotationProcessor ("com.github.bumptech.glide:compiler:4.14.2")
     implementation ("com.github.skydoves:landscapist-glide:2.1.7")
-    implementation ("io.coil-kt:coil-compose:2.3.0")
+    implementation ("io.coil-kt:coil-compose:2.4.0")
 
     val room_version = "2.5.2"
     implementation ("androidx.room:room-runtime:$room_version")

@@ -25,7 +25,7 @@ fun LoadImage(
         placeholder = painterResource(R.drawable.ic_image_24),
         alpha = 0.95f,
         contentDescription = contentDescription,
-        contentScale = ContentScale.Crop,
+        contentScale = ContentScale.Fit,
         modifier = modifier
     )
 }
