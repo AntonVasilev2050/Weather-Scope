@@ -1,5 +1,3 @@
-import org.jetbrains.kotlin.kapt3.base.Kapt.kapt
-
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
@@ -16,8 +14,8 @@ android {
         applicationId = "com.avv2050soft.weatherscope"
         minSdk = 24
         targetSdk = 34
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = 3
+        versionName = "3"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -56,9 +54,9 @@ android {
 
 dependencies {
 
-    implementation("androidx.core:core-ktx:1.10.1")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.1")
-    implementation("androidx.activity:activity-compose:1.7.2")
+    implementation("androidx.core:core-ktx:1.12.0")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.7.0")
+    implementation("androidx.activity:activity-compose:1.8.2")
     implementation(platform("androidx.compose:compose-bom:2023.03.00"))
     implementation("androidx.compose.ui:ui")
     implementation("androidx.compose.ui:ui-graphics")
@@ -72,8 +70,8 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
 
-    implementation ("androidx.navigation:navigation-compose:2.7.0")
-    implementation ("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.1")
+    implementation ("androidx.navigation:navigation-compose:2.7.7")
+    implementation ("androidx.lifecycle:lifecycle-viewmodel-compose:2.7.0")
 
     //retrofit
     implementation ("com.squareup.retrofit2:retrofit:2.9.0")
@@ -83,9 +81,9 @@ dependencies {
     implementation("com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.2")
 
     implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
-    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")
+    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.1")
 
-    implementation ("com.github.bumptech.glide:glide:4.14.2")
+    ksp ("com.github.bumptech.glide:ksp:4.14.2")
     annotationProcessor ("com.github.bumptech.glide:compiler:4.14.2")
     implementation ("com.github.skydoves:landscapist-glide:2.1.7")
     implementation ("io.coil-kt:coil-compose:2.4.0")
@@ -95,11 +93,11 @@ dependencies {
     implementation ("androidx.room:room-ktx:$room_version")
     ksp ("androidx.room:room-compiler:$room_version")
 
-    implementation("com.google.dagger:hilt-android:2.46")
-    implementation("androidx.hilt:hilt-navigation-compose:1.0.0")
+    implementation("com.google.dagger:hilt-android:2.48")
+    implementation("androidx.hilt:hilt-navigation-compose:1.1.0")
     kapt ("com.google.dagger:hilt-android-compiler:2.46")
 
-    implementation ("com.google.android.gms:play-services-location:21.0.1")
+    implementation ("com.google.android.gms:play-services-location:21.1.0")
 
     implementation("com.google.accompanist:accompanist-swiperefresh:0.19.0")
 }

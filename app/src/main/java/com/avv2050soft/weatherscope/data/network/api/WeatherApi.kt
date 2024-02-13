@@ -33,7 +33,7 @@ interface WeatherApi {
     ): Autocomplete
 
     companion object {
-        private const val API_KEY = "2f20cf8e97df4d1688a93525231311"
+        private const val API_KEY = "a5e2bf43b017454a9ac163713230412"
         private const val BASE_URL = "https://api.weatherapi.com/v1/"
 
         fun create(): WeatherApi {
