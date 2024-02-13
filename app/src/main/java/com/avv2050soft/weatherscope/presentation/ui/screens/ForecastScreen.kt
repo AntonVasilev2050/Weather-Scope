@@ -204,7 +204,6 @@ fun DetailsForecast(forecastDay: Forecastday, isExpanded: Boolean) {
 
 @Composable
 fun WeatherDayHourly(forecastDayHour: List<Hour>, isExpanded: Boolean) {
-    val tempFontSize = 16.sp
     val lazyListState = rememberLazyListState()
     if (isExpanded) {
         Column {

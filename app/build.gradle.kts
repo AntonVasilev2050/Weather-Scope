@@ -84,7 +84,6 @@ dependencies {
     implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.1")
 
     ksp ("com.github.bumptech.glide:ksp:4.14.2")
-    annotationProcessor ("com.github.bumptech.glide:compiler:4.14.2")
     implementation ("com.github.skydoves:landscapist-glide:2.1.7")
     implementation ("io.coil-kt:coil-compose:2.4.0")
 
