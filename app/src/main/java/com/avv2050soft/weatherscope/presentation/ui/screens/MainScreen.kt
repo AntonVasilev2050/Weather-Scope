@@ -128,5 +128,5 @@ fun FindLocationRow(
     }
 }
 
-private val FindLocationHeight = 72.dp
+private val FindLocationHeight = 52.dp
 
